@@ -1,0 +1,543 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="lib/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>用例列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 我的用例 <span
+        class="c-gray en">&gt;</span>用例列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                             href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div>
+        <div style="margin-left:10px;">
+            <label style="margin-left:30px;">id&nbsp;：</label>
+            <input type="number" name="cid" id="cid"
+                   placeholder=" 用例id" style="width:5%"
+                   class="input-text"/>
+            <label style="margin-left:30px;">用例名称：</label>
+            <input type="text" name="caseName" id="caseName"
+                   placeholder=" 用例名称" style="width:12%"
+                   class="input-text"/>
+            <!--<label style="margin-left:65px;">服务：</label><input type="text" name="servicekey" id="servicekey" placeholder=" serviceKey或serviceName" style="width:12%" class="input-text">-->
+            <label style="margin-left:30px;">&ensp;&ensp;&ensp;&ensp;服务：</label>
+            <span class="select-box" style="width:8%">
+                <select class="select" size="1" name="serviceKey" id="serviceKey">
+                    <option value="">--请选择--</option>
+                </select>
+            </span>
+            <label style="margin-left:30px;"> &ensp;&ensp;环境：</label>
+            <span class="select-box" style="width:8%">
+                <select class="select" size="1" name="envKey" id="envKey">
+                    <option value="" selected>--请选择--</option>
+                </select>
+            </span>
+
+        </div>
+        <div style="margin-left:10px;margin-top: 10px">
+            <label style="margin-left:30px;">iid：</label>
+            <input type="number" name="tiid" id="tiid"
+                   placeholder=" 接口id" style="width:5%"
+                   class="input-text">
+            <label style="margin-left:30px;">接口地址：</label>
+            <input type="text" name="tiUrl" id="tiUrl"
+                   placeholder=" 接口地址或接口描述" style="width:12%"
+                   class="input-text">
+
+            <label style="margin-left:30px;">断言类型：</label>
+            <span class="select-box" style="width:8%">
+                <select class="select" size="1" name="assertType" id="assertType">
+                    <option value="" selected>--请选择--</option>
+                </select>
+            </span>
+            <!--<label style="margin-left:37px;">设计人：</label><input type="text" name="author" id="author" placeholder=" 用例设计人" style="width:12%" class="input-text">-->
+            <label style="margin-left:30px;">设计人：</label>
+            <span class="select-box" style="width:8%">
+                <select class="select" size="1" name="author" id="author">
+                    <option value="" selected>--请选择--</option>
+                </select>
+            </span>
+            <button name="find" id="find" style="margin-left:50px;width:80px" class="btn btn-success" type="button"
+                    onclick="pageSkip(1)"><i class="Hui-iconfont">&#xe665;</i> 搜索
+            </button>
+            <button name="empty" id="empty" style="margin-left:10px;width:80px" class="btn btn-success" type="button"
+                    onclick="empty()"><i class="Hui-iconfont">&#xe665;</i> 清空
+            </button>
+        </div>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i
+                    class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+            <a id="tCase_add" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用例</a>
+        </span>
+        <span class="r">共有数据：<strong id="total">0</strong> 条</span>
+    </div>
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+        <table class="table table-border table-bordered table-bg table-hover table-sort" id="table">
+            <thead>
+            <tr class="text-c">
+                <th width="3%"><input name="" type="checkbox" value=""></th>
+                <th width="3%">id</th>
+                <th width="10%">用例名称</th>
+                <th width="10%">用例描述</th>
+                <th width="5%">服务</th>
+                <th width="5%">环境</th>
+                <th width="10%">接口名称</th>
+                <th width="15%">接口地址(iid)</th>
+                <th width="5%">断言类型</th>
+<!--                <th width="18%">期望结果</th>-->
+                <th width="5%">设计人</th>
+                <th width="5%" style="display:none">用例参数</th>
+                <th width="10%">更新时间</th>
+                <th width="10%">操作</th>
+            </tr>
+            </thead>
+            <tbody id="tcaseList">
+            </tbody>
+        </table>
+        <!--分页-->
+        <div class="dataTables_info" id="dataTables_info">
+            <span>共有 <strong id="totalPages"></strong> 页</span>
+            <span>当前第 <strong id="now"></strong> 页</span>
+        </div>
+        <div class="dataTables_paginate paging_simple_numbers" id="pager">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="static/hry-auto/util.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/select2/select2.full.js"></script>
+<script type="text/javascript" src="lib/select2/pinyin.js"></script>
+<script type="text/javascript">
+    var layerIndex;
+    /*    var w = document.body.clientWidth;
+        var h = document.body.clientHeight;*/
+    /*    var width = w * 70 / 100;
+        var height = h * 85 / 100;*/
+    //alert("宽=" + width + ",高=" + height);
+    //loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex: -1,
+            beforeSend: function () { //插件加载前
+                layerIndex = layer.load(1, {shade: [0.01, '#fff']});
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    skin: 'layui-layer-molv'
+                    , closeBtn: 0
+                    , shift: 4 //动画类型
+                });
+            }
+        });
+    });
+
+    function empty() {
+        // $("#servicekey").val("");
+        $("#serviceKey option:first").prop("selected", 'selected');
+        $("#tiUrl").val("");
+        $("#cid").val("");
+        $("#caseName").val("");
+        //$("#author").val("");
+        $("#author").val(null).trigger("change");
+        //$("#author").val("请选择").trigger("change");
+        $("#envKey option:first").prop("selected", 'selected');
+        $("#assertType option:first").prop("selected", 'selected');
+        $("#tiid").val("");
+    }
+
+    //初始加载
+    $(document).ready(function () {
+        /*        var onclik = "tCase_add('添加用例','tcase-add.html','" + width + "','" + height + "')";
+                $("#tCase_add").attr("onclick", onclik);*/
+        var list = getServiceList();
+        var serviceHtml = "";
+        for (i = 0; i < list.length; i++) {
+            var row = list[i];
+            var rowHtml = "<option value=\"" + row.id + "\">" + row.servicekey + "</option>";
+            serviceHtml = serviceHtml + rowHtml;
+        }
+        $("#serviceKey").append(serviceHtml);
+
+        var author = $.cookie('realnameCookie');
+        var dev = getCaseDesigners();
+        //console.log(dev);
+        var htmlDev = "";
+        for (var k = 0; k < dev.length; k++) {
+            var rowHtml = "";
+            var row = dev[k];
+            if (row.realname == author) {
+                rowHtml = "<option value=\"" + row.realname + "\" selected>" + row.realname + "</option>";
+            } else {
+                rowHtml = "<option value=\"" + row.realname + "\">" + row.realname + "</option>";
+            }
+            htmlDev = htmlDev + rowHtml;
+        }
+        $("#author").append(htmlDev);
+        $("#author").select2();
+
+        // var realName=$.cookie('realnameCookie');
+        // $("#author").val(realName);
+        var fromTiFlag = false;
+        var fromTiIid = null;
+        if (getParameter("fromTiIid") != null && getParameter("fromTiIid") != "") {
+            fromTiFlag = true;
+            fromTiIid = getParameter("fromTiIid");
+        }
+        if (fromTiFlag) {//如果是复制用例,这里选中
+            $("#tiid").val(fromTiIid);
+            $("#author").val(null).trigger("change");
+
+        }
+
+        var list = getEnvList();
+        var html = "";
+        for (var i = 0; i < list.length; i++) {
+            var row = list[i];
+            var rowHtml = "<option value=\"" + row.id + "\">" + row.envkey + "</option>";
+            html = html + rowHtml;
+        }
+        $("#envKey").append(html);
+
+        var assertList = getAssertType();
+        var asserts = "";
+        for (var k = 0; k < assertList.length; k++) {
+            var one = assertList[k];
+            var rowHtml = "<option value=\"" + one.id + "\">" + one.value + "</option>";
+            asserts = asserts + rowHtml;
+        }
+        $("#assertType").append(asserts);
+
+        pageSkip(1);
+
+    });
+
+    $("#tCase_add").click(function () {
+        tCase_add('添加用例', 'tcase-add.html', '75%', '75%');
+    });
+
+    //分页查询
+    function pageSkip(index) {
+        if (index == 0) {
+            return;
+        }
+        var serviceKey = $("#serviceKey").val();
+        var envKey = $("#envKey").val();
+        var tiUrl = $("#tiUrl").val();
+        var caseName = $("#caseName").val();
+        var author = $("#author").val();
+        var assertType = $("#assertType").val();
+        var cid = $("#cid").val();
+        var tiid = $("#tiid").val();
+
+
+        $.ajax({
+            type: "post",
+            url: "/tcase/selectByCondition",
+            data: {
+                id: cid,
+                iid: tiid,
+                serviceid: serviceKey,
+                envid: envKey,
+                iuri: tiUrl,
+                casename: caseName,
+                author: author,
+                asserttype: assertType,
+                status: 1,
+                pageNum: index,
+                pageSize: 10
+            },
+            dataType: "json",
+
+            success: function (data) {
+
+                var status = data.status;
+                var msg = data.msg;
+                console.log(data);
+                var html = "";
+
+                if (status == 0) {
+                    var list = data.data.list;
+                    $("#tcaseList").html("");
+                    var assertList = getAssertType();
+                    var assertName = "";
+                    var envList = getEnvList();
+                    var envKey = "";
+
+                    for (var i = 0; i < list.length; i++) {
+                        var row = list[i];
+
+                        var remark = "";
+                        if (row.remark != null) {
+                            remark = row.remark;
+                        }
+
+                        for (var k = 0; k < assertList.length; k++) {
+                            var one = assertList[k];
+                            if (one.id == row.asserttype) {
+                                assertName = one.value;
+                            }
+                        }
+
+
+                        for (var j = 0; j < envList.length; j++) {
+                            var two = envList[j];
+                            if (two.id == row.envid) {
+                                envKey = two.envkey;
+                            }
+                        }
+
+                        var expected = row.expected;
+                        if (row.expected == null) {
+                            expected = "";
+                            //assertName ="";
+                        } else {
+                            if (assertName == "key-value") {
+                                try {
+                                    var requestJson = JSON.stringify(JSON.parse(expected), null, 2);
+                                    expected = requestJson;
+                                } catch (e) {
+                                    expected = expected;
+                                }
+                            } else {
+                                expected = expected;
+                            }
+                        }
+                        var tiUrlHtml = "<a title=\"查看接口\" href=\"javascript:void(0);\" onclick=\"ti_list('接口管理','ti-list.html','" + row.iid + "')\"style=\"text-decoration: underline;color:#0000ff;\" >" + row.iuri + "</a>"
+                        var tiName = row.iuri + "(" + row.iremark + ")";
+
+                        var rowHtml = "<tr class=\"text-c\">\n" +
+                            "<td><input name=\"\" type=\"checkbox\" value=\"\"></td>\n" +
+                            "<td>" + row.id + "</td>\n" +
+                            "<td style='text-align: left'>" + row.casename + "</td>\n" +
+                            "<td>" + remark + "</td>\n" +
+                            "<td>" + row.servicekey + "</td>\n" +
+                            "<td>" + envKey + "</td>\n" +
+                            "<td>" + row.iremark + "</td>\n" +
+                            "<td style=\"text-align:left\">" + tiUrlHtml + "(" + row.iid + ")" + "</td>\n" +
+                            "<td title='"+expected+"'>" + assertName +"</td>\n" +
+                            /*"<td><pre style='text-align: left;border: 0px;padding: 0px;margin-bottom: 0px'>" + expected + "</pre></td>\n" +*/
+                            "<td>" + row.author + "</td>\n" +
+                            "<td style=\"display:none\">" +
+                            "<textarea>" + row.requestparam + "</textarea></td>\n" +
+                            "<td>" + row.updatetime + "</td>\n" +
+                            "<td class=\"f-14\">" +
+                            "<a title=\"运行\" href=\"javascript:;\" onclick=\"tcase_run(" + row.id + ",'" + tiName + "')\" style=\"text-decoration:none;margin-right:5px;\"><i class=\"Hui-iconfont\">&#xe6e6;</i></a> \n" +
+                            "<a title=\"复制\" href=\"javascript:;\"  onclick=\"tcase_copy2('用例复制','tcase-add.html','75%','75%'," + row.id + ")\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6ea;</i></a> \n" +
+                            "<a title=\"编辑\" href=\"javascript:;\" onclick=\"tcase_edit('用例编辑','tcase-edit.html'," + row.id + ",'75%','75%')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> \n" +
+                            "<a title=\"删除\" href=\"javascript:;\" onclick=\"tcase_del(this," + row.id + ")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
+                            "</td>\n" +
+                            "</tr>";
+                        html = html + rowHtml;
+                    }
+
+                    $("#tcaseList").append(html);
+                    pagination(data);
+                    layer.close(layerIndex);
+
+                } else {
+                    layer.close(layerIndex);
+                    alert(msg);
+                }
+            },
+
+
+        });
+
+
+    }
+
+    //用例运行
+    function tcase_run(caseId, tiName) {
+        var userId = $.cookie('uidCookie');
+        $.ajax({
+            type: "post",
+            url: "/tcase/runCaseById",
+            data: {
+                id: caseId,
+                userId: userId
+            },
+            dataType: "json",
+            success: function (data) {
+                var url = data.data;
+                var status = data.status;
+                var msg = data.msg;
+                if (status == 0) {
+                    layer.close(layerIndex);
+                    url = encodeURI("../report-loading.html?reportname=" + url + "&customname=" + tiName);
+                    window.open(url);
+                    /*var domain = "http://" + window.location.host;
+                    var myPopup = window.open("test-result.html");//.postMessage(list,domain);
+                    //周期性的发送消息
+                    setTimeout(function () {
+                        myPopup.postMessage(list, domain);
+                    }, 1000);*/
+
+                } else {
+                    layer.close(layerIndex);
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+
+            },
+            fail: function (data) {
+                layer.close(layerIndex);
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.close(layerIndex);
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+
+
+    }
+
+    function ti_list(title, url, fromTiIid) {
+        url = url + "?fromTiIid=" + fromTiIid;
+        creatIframe(url, title);
+        min_titleList();
+    }
+
+    function userGroup() {
+        var usergroup = null;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "get",
+            url: "/enum/groupEnum",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                usergroup = data;
+            },
+            fail: function (data) {
+                alert(JSON.stringify(data));
+            },
+            error: function (xhr) {
+                alert('error:' + JSON.stringify(xhr));
+            }
+        });
+        return usergroup;
+    }
+
+    function selectByGroupId() {
+        var users = null;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "post",
+            url: "/user/selectByGroupId",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                users = data;
+            },
+            fail: function (data) {
+                alert(JSON.stringify(data));
+            },
+            error: function (xhr) {
+                alert('error:' + JSON.stringify(xhr));
+            }
+        });
+        return users;
+    }
+
+    function getAssertType() {
+        var assertType = null;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "get",
+            url: "/enum/assertTypeEnum",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                assertType = data;
+            },
+            fail: function (data) {
+                alert(JSON.stringify(data));
+            },
+            error: function (xhr) {
+                alert('error:' + JSON.stringify(xhr));
+            }
+        });
+        return assertType;
+    }
+
+    /*用例-添加*/
+    function tCase_add(title, url, w, h) {
+        //alert("当前页面高度="+$(document.body).height());
+        layer_show1(title, url, w, h);
+
+    }
+
+    /*用例-编辑*/
+    function tcase_edit(title, url, id, w, h) {
+        url = url + "?id=" + id;
+        layer_show1(title, url, w, h);
+    }
+
+/*
+    /!*用例-复制*!/
+    function tcase_copy(title, url, w, h, num) {
+        var cells = $("#table")[0].rows[num + 1].cells;
+        var cellArr = [];
+        var requestparam = cells[11].innerText;
+        var expected = cells[9].innerText;
+        for (var i = 2; i < cells.length - 3; i++) {
+            cellArr.push(cells[i].innerText)
+        }
+        url = encodeURI(url + "?cellArr=" + cellArr + "&requestparam=" + requestparam + "&expected=" + expected);
+        layer_show1(title, url, w, h);
+    }
+*/
+
+    /**
+     * 用例复制
+     * by luqiwei 20180726
+     */
+    function tcase_copy2(title, url, w, h, sourceCaseId) {
+        url = encodeURI(url + "?cId=" + sourceCaseId);
+        layer_show1(title, url, w, h);
+    }
+
+    /*用例-删除*/
+    function tcase_del(obj, id) {
+        var ms = "用例删除需谨慎，请确认是否删除！";
+        del(obj, id, "/tcase/deleteOne", ms);
+    }
+
+</script>
+</body>
+</html>

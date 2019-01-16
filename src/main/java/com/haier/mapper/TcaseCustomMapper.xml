@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.TcaseCustomMapper">
+    <resultMap id="BaseResultMapTcaseCustom" type="com.haier.po.TcaseCustom">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="serviceKey" jdbcType="VARCHAR" property="servicekey"/>
+        <result column="serviceName" jdbcType="VARCHAR" property="servicename"/>
+        <result column="iUri" jdbcType="VARCHAR" property="iuri"/>
+        <result column="iremark" jdbcType="VARCHAR" property="iremark"/>
+        <result column="caseName" jdbcType="VARCHAR" property="casename"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="serviceId" jdbcType="INTEGER" property="serviceid"/>
+        <result column="iId" jdbcType="INTEGER" property="iid"/>
+        <result column="envId" jdbcType="INTEGER" property="envid"/>
+        <result column="testClass" jdbcType="VARCHAR" property="testclass"/>
+        <result column="requestParam" jdbcType="VARCHAR" property="requestparam"/>
+        <result column="assertType" jdbcType="INTEGER" property="asserttype"/>
+        <result column="expected" jdbcType="VARCHAR" property="expected"/>
+        <result column="cAfter" jdbcType="VARCHAR" property="cafter"/>
+        <result column="status" jdbcType="SMALLINT" property="status"/>
+        <result column="author" jdbcType="VARCHAR" property="author"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime"/>
+        <result column="requestHeader" jdbcType="VARCHAR" property="requestheader"/>
+    </resultMap>
+    <select id="selectByCondition" parameterType="com.haier.po.TcaseCustom" resultMap="BaseResultMapTcaseCustom">
+        SELECT tservice.`serviceKey`,tservice.`serviceName`,
+        ti.`iUri`,ti.`remark` iremark,
+        tcase.* FROM tcase
+        INNER JOIN ti ON tcase.`iId`=ti.`id` AND ti.`iStatus`>0
+        INNER JOIN tservice ON ti.`serviceId`=tservice.`id` AND tservice.`isDel`=0
+        WHERE tcase.`status`>0
+        <if test="_parameter != null">
+            <if test="id!=null">
+                AND tcase.`id`=#{id}
+            </if>
+            <if test="servicekey !=null and servicekey !=''">
+                AND tservice.`serviceKey` =#{servicekey}
+            </if>
+            <if test="serviceid!=null and serviceid!=0">
+                AND tcase.`serviceId` =#{serviceid}
+            </if>
+            <if test="iuri != null and iuri !=''">
+                AND (ti.`iUri` LIKE CONCAT('%',#{iuri},'%') or ti.`remark` LIKE CONCAT('%',#{iuri},'%'))
+            </if>
+            <if test="iremark != null and iremark !=''">
+                AND ti.`remark` LIKE CONCAT('%',#{iremark},'%')
+            </if>
+            <if test="casename != null and casename !=''">
+                AND (tcase.`caseName` LIKE CONCAT('%',#{casename},'%') OR tcase.`remark` LIKE
+                CONCAT('%',#{casename},'%'))
+            </if>
+            <if test="testclass!=null and testclass!=''">
+                AND tcase.`testClass`=#{testclass}
+            </if>
+            <if test="iid != null and iid != 0">
+                AND tcase.`iId`=#{iid}
+            </if>
+            <if test="envid != null">
+                AND (tcase.`envId`=#{envid} OR tcase.`envId`=0)
+            </if>
+            <if test="asserttype != null">
+                AND tcase.`assertType`=#{asserttype}
+            </if>
+            <if test="author != null and author !=''">
+                AND tcase.`author`=#{author}
+            </if>
+        </if>
+    </select>
+    <select id="selectCaseDesigners" resultType="java.lang.String">
+        SELECT DISTINCT (tcase.`author`)
+        FROM tcase
+    </select>
+</mapper>

@@ -1,0 +1,80 @@
+zdy:
+  reportPath: C:/testngReport/
+  resourcePathPattern: /test-output/
+  autoCodeDir: C:/autoCode/
+  debug: false
+server:
+  port: 8885
+logging:
+  file: c:/logs/hryAuto/hryAuto.log
+  level:
+    com.haier.aspect: debug
+    com.haier.config: debug
+    com.haier.controller: debug
+    com.haier.interceptor: debug
+    com.haier.service: debug
+    com.haier.service.impl: debug
+    com.haier.util: debug
+    com.haier.testng.*: debug
+    #com.haier.mapper.*: debug
+spring:
+  application:
+    name: hryAuto
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/hry_auto?serverTimezone=CTT&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    druid:
+#      name: myDatasource
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      max-create-task-count: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 30000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      filters: stat,log4j
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          enabled: true
+          scheduler:
+            instanceName: hrySchdeuler
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: false
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10  #并发个数
+            threadPriority: 5 #优先级
+            threadsInheritContextClassLoaderOfInitializingThread: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis:
+  mapper-locations: com/haier/mapper/*.xml
+  type-aliases-package: com.haier.po
+
+
+
+
+
+
+
+
+

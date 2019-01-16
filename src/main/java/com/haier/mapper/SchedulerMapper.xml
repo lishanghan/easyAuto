@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.SchedulerMapper">
+    <resultMap id="BaseResultMap" type="com.haier.po.HryScheduler">
+        <result column="sched_name" property="sched_name" javaType="String"/>
+        <result column="trigger_name" property="trigger_name" javaType="String"/>
+        <result column="trigger_group" property="trigger_group" javaType="String"/>
+        <result column="description" property="description" javaType="String"/>
+        <result column="next_fire_time" property="next_fire_time" javaType="BigInteger"/>
+        <result column="prev_fire_time" property="prev_fire_time" javaType="BigInteger"/>
+        <result column="trigger_state" property="trigger_state" javaType="String"/>
+        <result column="cron_expression" property="cron_expression" javaType="String"/>
+        <result column="time_zone_id" property="time_zone_id" javaType="String"/>
+        <result column="job_name" property="job_name" javaType="String"/>
+        <result column="job_group" property="job_group" javaType="String"/>
+        <result column="is_durable" property="is_durable" javaType="String"/>
+        <result column="is_nonconcurrent" property="is_nonconcurrent" javaType="String"/>
+        <result column="is_update_data" property="is_update_data" javaType="String"/>
+        <result column="job_class_name" property="job_class_name" javaType="String"/>
+    </resultMap>
+    <select id="selectAll" parameterType="com.haier.po.HryScheduler" resultMap="BaseResultMap">
+        SELECT
+        main.`SCHED_NAME`,
+        main.`TRIGGER_NAME`,
+        main.`TRIGGER_GROUP`,
+        main.`DESCRIPTION`,
+        main.`NEXT_FIRE_TIME`,
+        main.`PREV_FIRE_TIME`,
+        main.`TRIGGER_STATE`,
+        sub.`CRON_EXPRESSION`,
+        sub.`TIME_ZONE_ID`,
+        job.`JOB_NAME`,
+        job.`JOB_GROUP`,
+        job.`IS_DURABLE`,
+        job.`IS_NONCONCURRENT`,
+        job.`IS_UPDATE_DATA`,
+        job.`JOB_CLASS_NAME`
+        FROM `qrtz_triggers` main
+        INNER JOIN `qrtz_cron_triggers` sub
+        ON main.`SCHED_NAME` = sub.`SCHED_NAME` AND main.`TRIGGER_NAME` = sub.`TRIGGER_NAME` AND
+        main.`TRIGGER_GROUP` = sub.`TRIGGER_GROUP`
+        INNER JOIN `qrtz_job_details` job ON main.`JOB_NAME` = job.`JOB_NAME` AND main.`JOB_GROUP` = job.`JOB_GROUP`
+        WHERE true
+        <if test="_parameter != null">
+            <if test="trigger_name!=null and trigger_name!=''">
+                AND main.`trigger_name`=#{trigger_name}
+            </if>
+            <if test="trigger_group!=null and trigger_group!=''">
+                AND main.`trigger_group` LIKE CONCAT('%',#{trigger_group},'%')
+            </if>
+            <if test="description!=null and description!=''">
+                AND main.`description` LIKE CONCAT('%',#{description},'%')
+            </if>
+            <if test="trigger_state!=null and trigger_state!=''">
+                AND main.`trigger_state`=#{trigger_state}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectHryJob" parameterType="com.haier.po.HryJob" resultMap="BaseResultMap">
+        SELECT
+        main.`SCHED_NAME`,
+        main.`TRIGGER_NAME`,
+        main.`TRIGGER_GROUP`,
+        main.`DESCRIPTION`,
+        main.`NEXT_FIRE_TIME`,
+        main.`PREV_FIRE_TIME`,
+        main.`TRIGGER_STATE`,
+        sub.`CRON_EXPRESSION`,
+        sub.`TIME_ZONE_ID`,
+        job.`JOB_NAME`,
+        job.`JOB_GROUP`,
+        job.`IS_DURABLE`,
+        job.`IS_NONCONCURRENT`,
+        job.`IS_UPDATE_DATA`,
+        job.`JOB_CLASS_NAME`
+        FROM `qrtz_triggers` main
+        INNER JOIN `qrtz_cron_triggers` sub
+        ON main.`SCHED_NAME` = sub.`SCHED_NAME` AND main.`TRIGGER_NAME` = sub.`TRIGGER_NAME` AND
+        main.`TRIGGER_GROUP` = sub.`TRIGGER_GROUP`
+        INNER JOIN `qrtz_job_details` job ON main.`JOB_NAME` = job.`JOB_NAME` AND main.`JOB_GROUP` = job.`JOB_GROUP`
+        WHERE true
+        <if test="_parameter != null">
+            <if test="jobName!=null and jobName!=''">
+                AND main.`trigger_name`=#{jobName}
+            </if>
+            <if test="jobGroup!=null and jobGroup!=''">
+                AND main.`trigger_group`=#{jobGroup}
+            </if>
+        </if>
+    </select>
+</mapper>

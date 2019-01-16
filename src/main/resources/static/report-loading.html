@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>测试中</title>
+    <style type="text/css">
+        body {
+            font-size: 14px;
+            font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #441c72;
+        }
+
+        span {
+            display: block;
+            margin: 0 auto;
+        }
+
+        span[class*="l-"] {
+            height: 20px;
+            width: 20px;
+            background: #fff;
+            display: inline-block;
+            margin: 20px 2px;
+
+            border-radius: 100%;
+            -webkit-border-radius: 100%;
+            -moz-border-radius: 100%;
+
+            -webkit-animation: loader 6s infinite;
+            -webkit-animation-timing-function: cubic-bezier(0.030, 0.615, 0.995, 0.415);
+            -webkit-animation-fill-mode: both;
+            -moz-animation: loader 6s infinite;
+            -moz-animation-timing-function: cubic-bezier(0.030, 0.615, 0.995, 0.415);
+            -moz-animation-fill-mode: both;
+            -ms-animation: loader 6s infinite;
+            -ms-animation-timing-function: cubic-bezier(0.030, 0.615, 0.995, 0.415);
+            -ms-animation-fill-mode: both;
+            animation: loader 6s infinite;
+            animation-timing-function: cubic-bezier(0.030, 0.615, 0.995, 0.415);
+            animation-fill-mode: both;
+        }
+
+        span.l-12 {
+            -webkit-animation-delay: 2.2s;
+            animation-delay: 2.2s;
+            -ms-animation-delay: 2.2s;
+            -moz-animation-delay: 2.2s;
+        }
+        span.l-11 {
+            -webkit-animation-delay: 2.0s;
+            animation-delay: 2.0s;
+            -ms-animation-delay: 2.0s;
+            -moz-animation-delay: 2.0s;
+        }
+        span.l-10 {
+            -webkit-animation-delay: 1.8s;
+            animation-delay: 1.8s;
+            -ms-animation-delay: 1.8s;
+            -moz-animation-delay: 1.8s;
+        }
+        span.l-9 {
+            -webkit-animation-delay: 1.6s;
+            animation-delay: 1.6s;
+            -ms-animation-delay: 1.6s;
+            -moz-animation-delay: 1.6s;
+        }
+        span.l-8 {
+            -webkit-animation-delay: 1.4s;
+            animation-delay: 1.4s;
+            -ms-animation-delay: 1.4s;
+            -moz-animation-delay: 1.4s;
+        }
+        span.l-7 {
+            -webkit-animation-delay: 1.2s;
+            animation-delay: 1.2s;
+            -ms-animation-delay: 1.2s;
+            -moz-animation-delay: 1.2s;
+        }
+
+        span.l-1 {
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+            -ms-animation-delay: 1s;
+            -moz-animation-delay: 1s;
+        }
+
+        span.l-2 {
+            -webkit-animation-delay: 0.8s;
+            animation-delay: 0.8s;
+            -ms-animation-delay: 0.8s;
+            -moz-animation-delay: 0.8s;
+        }
+
+        span.l-3 {
+            -webkit-animation-delay: 0.6s;
+            animation-delay: 0.6s;
+            -ms-animation-delay: 0.6s;
+            -moz-animation-delay: 0.6s;
+        }
+
+        span.l-4 {
+            -webkit-animation-delay: 0.4s;
+            animation-delay: 0.4s;
+            -ms-animation-delay: 0.4s;
+            -moz-animation-delay: 0.4s;
+        }
+
+        span.l-5 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s;
+            -ms-animation-delay: 0.2s;
+            -moz-animation-delay: 0.2s;
+        }
+
+        span.l-6 {
+            -webkit-animation-delay: 0s;
+            animation-delay: 0s;
+            -ms-animation-delay: 0s;
+            -moz-animation-delay: 0s;
+        }
+
+        @-webkit-keyframes loader {
+            0% {
+                -webkit-transform: translateX(-30px);
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+            }
+            50% {
+                -webkit-transform: translateX(30px);
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @-moz-keyframes loader {
+            0% {
+                -moz-transform: translateX(-30px);
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+            }
+            50% {
+                -moz-transform: translateX(30px);
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /*        @-keyframes loader {
+                0% {
+                    -transform: translateX(-30px);
+                    opacity: 0;
+                }
+                25% {
+                    opacity: 1;
+                }
+                50% {
+                    -transform: translateX(30px);
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 0;
+                }
+                }*/
+
+        @-ms-keyframes loader {
+            0% {
+                -ms-transform: translateX(-30px);
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+            }
+            50% {
+                -ms-transform: translateX(30px);
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+    <script type="application/javascript">
+        var reportname = getParameter("reportname");
+        var customname = getParameter("customname");
+
+        $(document).ready(function () {
+            $("#customname").append(customname);
+
+        });
+
+        var t = 2500;
+        var interval = setInterval(selectReport, t, reportname);//每1秒钟主动查询一次测试报告的状态
+        function selectReport(reportname) {
+            t += 1000;
+            if (reportname == null || reportname == "") {
+                return;
+            }
+            var reportStatus = null;
+            $.ajaxSetup({async: false});
+            $.ajax({
+                type: "post",
+                url: "/report/getStatus",
+                data: {
+                    reportname: reportname
+                },
+                dataType: "json",
+                success: function (data) {
+
+                    var status = data.status;
+
+                    var msg = data.msg;
+
+                    if (status == 0) {
+                        reportStatus = data.data;
+                    } else {
+                        layer.alert(msg, {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        });
+                    }
+
+                },
+                fail: function (data) {
+                    layer.alert(JSON.stringify(data), {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                },
+                error: function (xhr) {
+                    layer.alert('Error' + JSON.stringify(xhr), {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+            });
+
+            if (reportStatus == 10) {
+                this.location.href = reportname;
+            } else {
+                clearInterval(interval);
+                interval = setInterval(selectReport, t, reportname);
+            }
+
+        }
+
+        function getParameter(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+    </script>
+</head>
+<body>
+<span style="font-size: 20px;" id="customname"></span>
+<span></span>
+<span style="font-size: 20px;margin-top: 20px;">测试中</span>
+<span class="l-12"></span>
+<span class="l-11"></span>
+<span class="l-10"></span>
+<span class="l-9"></span>
+<span class="l-8"></span>
+<span class="l-7"></span>
+<span class="l-1"></span>
+<span class="l-2"></span>
+<span class="l-3"></span>
+<span class="l-4"></span>
+<span class="l-5"></span>
+<span class="l-6"></span>
+</body>
+</html>

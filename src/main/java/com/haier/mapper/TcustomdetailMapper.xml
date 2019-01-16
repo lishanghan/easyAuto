@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.TcustomdetailMapper">
+  <resultMap id="BaseResultMap" type="com.haier.po.Tcustomdetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="customId" jdbcType="INTEGER" property="customid" />
+    <result column="clientLevel" jdbcType="INTEGER" property="clientlevel" />
+    <result column="clientId" jdbcType="INTEGER" property="clientid" />
+    <result column="parentClientId" jdbcType="INTEGER" property="parentclientid" />
+    <result column="hasChild" jdbcType="BIT" property="haschild" />
+    <result column="clientName" jdbcType="VARCHAR" property="clientname" />
+    <result column="className" jdbcType="VARCHAR" property="classname" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, priority, customId, clientLevel, clientId, parentClientId, hasChild, clientName, 
+    className, status
+  </sql>
+  <select id="selectByExample" parameterType="com.haier.po.TcustomdetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tcustomdetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tcustomdetail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tcustomdetail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.haier.po.TcustomdetailExample">
+    delete from tcustomdetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.haier.po.Tcustomdetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tcustomdetail (priority, customId, clientLevel, 
+      clientId, parentClientId, hasChild, 
+      clientName, className, status
+      )
+    values (#{priority,jdbcType=INTEGER}, #{customid,jdbcType=INTEGER}, #{clientlevel,jdbcType=INTEGER}, 
+      #{clientid,jdbcType=INTEGER}, #{parentclientid,jdbcType=INTEGER}, #{haschild,jdbcType=BIT}, 
+      #{clientname,jdbcType=VARCHAR}, #{classname,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.haier.po.Tcustomdetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tcustomdetail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="priority != null">
+        priority,
+      </if>
+      <if test="customid != null">
+        customId,
+      </if>
+      <if test="clientlevel != null">
+        clientLevel,
+      </if>
+      <if test="clientid != null">
+        clientId,
+      </if>
+      <if test="parentclientid != null">
+        parentClientId,
+      </if>
+      <if test="haschild != null">
+        hasChild,
+      </if>
+      <if test="clientname != null">
+        clientName,
+      </if>
+      <if test="classname != null">
+        className,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="priority != null">
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="customid != null">
+        #{customid,jdbcType=INTEGER},
+      </if>
+      <if test="clientlevel != null">
+        #{clientlevel,jdbcType=INTEGER},
+      </if>
+      <if test="clientid != null">
+        #{clientid,jdbcType=INTEGER},
+      </if>
+      <if test="parentclientid != null">
+        #{parentclientid,jdbcType=INTEGER},
+      </if>
+      <if test="haschild != null">
+        #{haschild,jdbcType=BIT},
+      </if>
+      <if test="clientname != null">
+        #{clientname,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null">
+        #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.haier.po.TcustomdetailExample" resultType="java.lang.Long">
+    select count(*) from tcustomdetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tcustomdetail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.priority != null">
+        priority = #{record.priority,jdbcType=INTEGER},
+      </if>
+      <if test="record.customid != null">
+        customId = #{record.customid,jdbcType=INTEGER},
+      </if>
+      <if test="record.clientlevel != null">
+        clientLevel = #{record.clientlevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.clientid != null">
+        clientId = #{record.clientid,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentclientid != null">
+        parentClientId = #{record.parentclientid,jdbcType=INTEGER},
+      </if>
+      <if test="record.haschild != null">
+        hasChild = #{record.haschild,jdbcType=BIT},
+      </if>
+      <if test="record.clientname != null">
+        clientName = #{record.clientname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classname != null">
+        className = #{record.classname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tcustomdetail
+    set id = #{record.id,jdbcType=INTEGER},
+      priority = #{record.priority,jdbcType=INTEGER},
+      customId = #{record.customid,jdbcType=INTEGER},
+      clientLevel = #{record.clientlevel,jdbcType=INTEGER},
+      clientId = #{record.clientid,jdbcType=INTEGER},
+      parentClientId = #{record.parentclientid,jdbcType=INTEGER},
+      hasChild = #{record.haschild,jdbcType=BIT},
+      clientName = #{record.clientname,jdbcType=VARCHAR},
+      className = #{record.classname,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.haier.po.Tcustomdetail">
+    update tcustomdetail
+    <set>
+      <if test="priority != null">
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="customid != null">
+        customId = #{customid,jdbcType=INTEGER},
+      </if>
+      <if test="clientlevel != null">
+        clientLevel = #{clientlevel,jdbcType=INTEGER},
+      </if>
+      <if test="clientid != null">
+        clientId = #{clientid,jdbcType=INTEGER},
+      </if>
+      <if test="parentclientid != null">
+        parentClientId = #{parentclientid,jdbcType=INTEGER},
+      </if>
+      <if test="haschild != null">
+        hasChild = #{haschild,jdbcType=BIT},
+      </if>
+      <if test="clientname != null">
+        clientName = #{clientname,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null">
+        className = #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.haier.po.Tcustomdetail">
+    update tcustomdetail
+    set priority = #{priority,jdbcType=INTEGER},
+      customId = #{customid,jdbcType=INTEGER},
+      clientLevel = #{clientlevel,jdbcType=INTEGER},
+      clientId = #{clientid,jdbcType=INTEGER},
+      parentClientId = #{parentclientid,jdbcType=INTEGER},
+      hasChild = #{haschild,jdbcType=BIT},
+      clientName = #{clientname,jdbcType=VARCHAR},
+      className = #{classname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

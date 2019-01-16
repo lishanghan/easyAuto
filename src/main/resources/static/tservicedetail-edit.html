@@ -1,0 +1,345 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]-->
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]-->
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <!--/meta 作为公共模版分离出去-->
+    <title>用户编辑</title>
+</head>
+<body>
+<article class="page-container">
+    <form method="post" class="form form-horizontal" id="form">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>服务：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box">
+                    <select class="select" size="1" name="service" id="service">
+                        <option value="" selected>请选择服务</option>
+                    </select>
+				</span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>环境：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box">
+                    <select class="select" size="1" name="env" id="env">
+                        <option value="" selected>请选择环境</option>
+                    </select>
+				</span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>Host：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="对应host信息" id="hostInfo" name="hostInfo">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">数据库信息：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <!--<input type="text" class="input-text" value="" placeholder="" id="dbInfo" name="dbInfo">-->
+                <textarea id="dbInfo" name="dbInfo" cols="" rows="" class="textarea valid" placeholder=""></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">swagger地址：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="对应的swagger地址" id="swaggerUrl"
+                       name="swaggerUrl">
+            </div>
+        </div>
+        <!--<div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">测试类：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="测试工厂" id="clazz" name="clazz">
+            </div>
+        </div>-->
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3" id="submit">
+            </div>
+        </div>
+    </form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+    var layerIndex;
+    //loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex: -1,
+            beforeSend: function () { //插件加载前
+                layerIndex = layer.load(1, {shade: [1.01, '#fff']});
+                $('#admin-role-save').val("正在提交请稍等...")
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+    });
+
+    function getParameter(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    function getServiceList() {
+        var service = null;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "post",
+            url: "/tservice/selectByConditionSimple",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+                if (status == 0) {
+                    service = data.data;
+                } else {
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+        return service;
+    }
+
+    function getTenvList() {
+        var env = null;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "post",
+            url: "/tenv/selectAll",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+                if (status == 0) {
+                    env = data.data;
+                } else {
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+        return env;
+    }
+
+    //页面加载处理
+    $(document).ready(function () {
+        var id = getParameter('id');
+        $("#id").val(id);
+
+        $.ajax({
+            type: "post",
+            url: "/tservicedetail/selectOne",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+                var list = data.data;
+                console.log(data);
+
+                if (status == 0) {
+                    var serviceid = list.serviceid;
+                    var envid = list.envid;
+                    var hostinfo = list.hostinfo;
+                    var dbinfo = list.dbinfo;
+                    var swaggerurl = list.swaggerurl;
+                    /*var clazz=list.clazz;*/
+
+                    var submit = "<button type=\"button\" class=\"btn btn-success radius\" id=\"admin-role-save\" name=\"admin-role-save\" onclick=\"editTenvDetail(" + id + ")\"><i class=\"icon-ok\"></i> 提交</button>";
+                    $("#submit").append(submit);
+                    var html = "";
+                    var services = getServiceList();
+                    for (var i = 0; i < services.length; i++) {
+                        var row = services[i];
+                        if (row.id == serviceid) {
+                            var rowHtml = "<option value=\"" + row.id + "\" selected>" + row.servicekey + "</option>";
+                        } else {
+                            var rowHtml = "<option value=\"" + row.id + "\">" + row.servicekey + "</option>";
+                        }
+                        html = html + rowHtml;
+                    }
+
+                    var envs = "";
+                    var env = getTenvList();
+                    for (var k = 0; k < env.length; k++) {
+                        var rowEnv = env[k];
+                        if (rowEnv.id == envid) {
+                            var envHtml = "<option value=\"" + rowEnv.id + "\" selected>" + rowEnv.envkey + "</option>";
+                        } else {
+                            var envHtml = "<option value=\"" + rowEnv.id + "\">" + rowEnv.envkey + "</option>";
+                        }
+                        envs = envs + envHtml;
+                    }
+
+                    $("#service").append(html);
+                    $("#env").append(envs);
+                    $("#hostInfo").val(hostinfo);
+                    if (dbinfo != null) {
+                        try {
+                            var dbInfoJson = JSON.stringify(JSON.parse(dbinfo), null, 2);
+                            $("#dbInfo").val(dbInfoJson);
+                        } catch (e) {
+                            $("#dbInfo").val(dbinfo);
+                        }
+                    } else {
+                        $("#dbInfo").val("");
+                    }
+                    $("#swaggerUrl").val(swaggerurl);
+                    /*$("#clazz").val(clazz);*/
+                    layer.close(layerIndex);
+
+                } else {
+                    layer.close(layerIndex);
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+
+            }
+        });
+
+
+    });
+
+    //编辑服务与环境绑定关系
+    function editTenvDetail(id) {
+        var service = $("#service").val();
+        var env = $("#env").val();
+        var hostInfo = $("#hostInfo").val();
+        var dbInfo = $("#dbInfo").val();
+        var swaggerUrl = $("#swaggerUrl").val();
+        /*var clazz = $("#clazz").val();*/
+
+        if (service == null || service == "") {
+            layer.msg("请选择服务！");
+            return;
+        } else if (env == null || env == "") {
+            layer.msg("请选择环境！");
+            return;
+        } else if (hostInfo == null || hostInfo == "") {
+            layer.msg("host不能为空！");
+            return;
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/tservicedetail/updateOne',
+                data: {
+                    id: id,
+                    serviceid: service,
+                    envid: env,
+                    hostinfo: hostInfo,
+                    dbinfo: dbInfo,
+                    swaggerurl: swaggerUrl,
+                    /* clazz:clazz,*/
+                    status: 1
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var status = data.status;
+                    var msg = data.msg;
+                    var list = data.data;
+
+                    if (status == 0) {
+                        //alert("更新成功！");
+                        window.parent.pageSkip(1);;
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    } else {
+                        layer.close(layerIndex);
+                        layer.alert(msg, {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        });
+                    }
+
+                },
+                error: function (xhr) {
+                    layer.close(layerIndex);
+                    layer.alert('Error' + JSON.stringify(xhr), {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    });
+                },
+            });
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

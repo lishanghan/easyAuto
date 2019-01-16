@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.TiMapper">
+  <resultMap id="BaseResultMap" type="com.haier.po.Ti">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="serviceId" jdbcType="INTEGER" property="serviceid" />
+    <result column="iUri" jdbcType="VARCHAR" property="iuri" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="iRequestMethod" jdbcType="INTEGER" property="irequestmethod" />
+    <result column="iContentType" jdbcType="INTEGER" property="icontenttype" />
+    <result column="iHeaderSample" jdbcType="VARCHAR" property="iheadersample" />
+    <result column="iParamType" jdbcType="INTEGER" property="iparamtype" />
+    <result column="iParamSample" jdbcType="VARCHAR" property="iparamsample" />
+    <result column="iResponseType" jdbcType="INTEGER" property="iresponsetype" />
+    <result column="iDev" jdbcType="VARCHAR" property="idev" />
+    <result column="caseCount" jdbcType="INTEGER" property="casecount" />
+    <result column="iStatus" jdbcType="INTEGER" property="istatus" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, serviceId, iUri, remark, iRequestMethod, iContentType, iHeaderSample, iParamType, 
+    iParamSample, iResponseType, iDev, caseCount, iStatus, updateTime
+  </sql>
+  <select id="selectByExample" parameterType="com.haier.po.TiExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ti
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ti
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.haier.po.TiExample">
+    delete from ti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.haier.po.Ti">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ti (serviceId, iUri, remark, 
+      iRequestMethod, iContentType, iHeaderSample, 
+      iParamType, iParamSample, iResponseType, 
+      iDev, caseCount, iStatus, 
+      updateTime)
+    values (#{serviceid,jdbcType=INTEGER}, #{iuri,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{irequestmethod,jdbcType=INTEGER}, #{icontenttype,jdbcType=INTEGER}, #{iheadersample,jdbcType=VARCHAR}, 
+      #{iparamtype,jdbcType=INTEGER}, #{iparamsample,jdbcType=VARCHAR}, #{iresponsetype,jdbcType=INTEGER}, 
+      #{idev,jdbcType=VARCHAR}, #{casecount,jdbcType=INTEGER}, #{istatus,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.haier.po.Ti">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ti
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceid != null">
+        serviceId,
+      </if>
+      <if test="iuri != null">
+        iUri,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="irequestmethod != null">
+        iRequestMethod,
+      </if>
+      <if test="icontenttype != null">
+        iContentType,
+      </if>
+      <if test="iheadersample != null">
+        iHeaderSample,
+      </if>
+      <if test="iparamtype != null">
+        iParamType,
+      </if>
+      <if test="iparamsample != null">
+        iParamSample,
+      </if>
+      <if test="iresponsetype != null">
+        iResponseType,
+      </if>
+      <if test="idev != null">
+        iDev,
+      </if>
+      <if test="casecount != null">
+        caseCount,
+      </if>
+      <if test="istatus != null">
+        iStatus,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceid != null">
+        #{serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="iuri != null">
+        #{iuri,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="irequestmethod != null">
+        #{irequestmethod,jdbcType=INTEGER},
+      </if>
+      <if test="icontenttype != null">
+        #{icontenttype,jdbcType=INTEGER},
+      </if>
+      <if test="iheadersample != null">
+        #{iheadersample,jdbcType=VARCHAR},
+      </if>
+      <if test="iparamtype != null">
+        #{iparamtype,jdbcType=INTEGER},
+      </if>
+      <if test="iparamsample != null">
+        #{iparamsample,jdbcType=VARCHAR},
+      </if>
+      <if test="iresponsetype != null">
+        #{iresponsetype,jdbcType=INTEGER},
+      </if>
+      <if test="idev != null">
+        #{idev,jdbcType=VARCHAR},
+      </if>
+      <if test="casecount != null">
+        #{casecount,jdbcType=INTEGER},
+      </if>
+      <if test="istatus != null">
+        #{istatus,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.haier.po.TiExample" resultType="java.lang.Long">
+    select count(*) from ti
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ti
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.serviceid != null">
+        serviceId = #{record.serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="record.iuri != null">
+        iUri = #{record.iuri,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.irequestmethod != null">
+        iRequestMethod = #{record.irequestmethod,jdbcType=INTEGER},
+      </if>
+      <if test="record.icontenttype != null">
+        iContentType = #{record.icontenttype,jdbcType=INTEGER},
+      </if>
+      <if test="record.iheadersample != null">
+        iHeaderSample = #{record.iheadersample,jdbcType=VARCHAR},
+      </if>
+      <if test="record.iparamtype != null">
+        iParamType = #{record.iparamtype,jdbcType=INTEGER},
+      </if>
+      <if test="record.iparamsample != null">
+        iParamSample = #{record.iparamsample,jdbcType=VARCHAR},
+      </if>
+      <if test="record.iresponsetype != null">
+        iResponseType = #{record.iresponsetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.idev != null">
+        iDev = #{record.idev,jdbcType=VARCHAR},
+      </if>
+      <if test="record.casecount != null">
+        caseCount = #{record.casecount,jdbcType=INTEGER},
+      </if>
+      <if test="record.istatus != null">
+        iStatus = #{record.istatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.updatetime != null">
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ti
+    set id = #{record.id,jdbcType=INTEGER},
+      serviceId = #{record.serviceid,jdbcType=INTEGER},
+      iUri = #{record.iuri,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      iRequestMethod = #{record.irequestmethod,jdbcType=INTEGER},
+      iContentType = #{record.icontenttype,jdbcType=INTEGER},
+      iHeaderSample = #{record.iheadersample,jdbcType=VARCHAR},
+      iParamType = #{record.iparamtype,jdbcType=INTEGER},
+      iParamSample = #{record.iparamsample,jdbcType=VARCHAR},
+      iResponseType = #{record.iresponsetype,jdbcType=INTEGER},
+      iDev = #{record.idev,jdbcType=VARCHAR},
+      caseCount = #{record.casecount,jdbcType=INTEGER},
+      iStatus = #{record.istatus,jdbcType=INTEGER},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.haier.po.Ti">
+    update ti
+    <set>
+      <if test="serviceid != null">
+        serviceId = #{serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="iuri != null">
+        iUri = #{iuri,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="irequestmethod != null">
+        iRequestMethod = #{irequestmethod,jdbcType=INTEGER},
+      </if>
+      <if test="icontenttype != null">
+        iContentType = #{icontenttype,jdbcType=INTEGER},
+      </if>
+      <if test="iheadersample != null">
+        iHeaderSample = #{iheadersample,jdbcType=VARCHAR},
+      </if>
+      <if test="iparamtype != null">
+        iParamType = #{iparamtype,jdbcType=INTEGER},
+      </if>
+      <if test="iparamsample != null">
+        iParamSample = #{iparamsample,jdbcType=VARCHAR},
+      </if>
+      <if test="iresponsetype != null">
+        iResponseType = #{iresponsetype,jdbcType=INTEGER},
+      </if>
+      <if test="idev != null">
+        iDev = #{idev,jdbcType=VARCHAR},
+      </if>
+      <if test="casecount != null">
+        caseCount = #{casecount,jdbcType=INTEGER},
+      </if>
+      <if test="istatus != null">
+        iStatus = #{istatus,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.haier.po.Ti">
+    update ti
+    set serviceId = #{serviceid,jdbcType=INTEGER},
+      iUri = #{iuri,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      iRequestMethod = #{irequestmethod,jdbcType=INTEGER},
+      iContentType = #{icontenttype,jdbcType=INTEGER},
+      iHeaderSample = #{iheadersample,jdbcType=VARCHAR},
+      iParamType = #{iparamtype,jdbcType=INTEGER},
+      iParamSample = #{iparamsample,jdbcType=VARCHAR},
+      iResponseType = #{iresponsetype,jdbcType=INTEGER},
+      iDev = #{idev,jdbcType=VARCHAR},
+      caseCount = #{casecount,jdbcType=INTEGER},
+      iStatus = #{istatus,jdbcType=INTEGER},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.TclassMapper">
+  <resultMap id="BaseResultMap" type="com.haier.po.Tclass">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="packageName" jdbcType="VARCHAR" property="packagename" />
+    <result column="className" jdbcType="VARCHAR" property="classname" />
+    <result column="sId" jdbcType="INTEGER" property="sid" />
+    <result column="sKey" jdbcType="VARCHAR" property="skey" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, packageName, className, sId, sKey, author, remark, updateTime, status
+  </sql>
+  <select id="selectByExample" parameterType="com.haier.po.TclassExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tclass
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tclass
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tclass
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.haier.po.TclassExample">
+    delete from tclass
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.haier.po.Tclass" keyProperty="id" useGeneratedKeys="true">
+    insert into tclass (id, packageName, className, 
+      sId, sKey, author, 
+      remark, updateTime, status
+      )
+    values (#{id,jdbcType=INTEGER}, #{packagename,jdbcType=VARCHAR}, #{classname,jdbcType=VARCHAR}, 
+      #{sid,jdbcType=INTEGER}, #{skey,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.haier.po.Tclass" useGeneratedKeys="true" keyProperty="id">
+    insert into tclass
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="packagename != null">
+        packageName,
+      </if>
+      <if test="classname != null">
+        className,
+      </if>
+      <if test="sid != null">
+        sId,
+      </if>
+      <if test="skey != null">
+        sKey,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="packagename != null">
+        #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null">
+        #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null">
+        #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="skey != null">
+        #{skey,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.haier.po.TclassExample" resultType="java.lang.Long">
+    select count(*) from tclass
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tclass
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.packagename != null">
+        packageName = #{record.packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classname != null">
+        className = #{record.classname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sid != null">
+        sId = #{record.sid,jdbcType=INTEGER},
+      </if>
+      <if test="record.skey != null">
+        sKey = #{record.skey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.author != null">
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatetime != null">
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tclass
+    set id = #{record.id,jdbcType=INTEGER},
+      packageName = #{record.packagename,jdbcType=VARCHAR},
+      className = #{record.classname,jdbcType=VARCHAR},
+      sId = #{record.sid,jdbcType=INTEGER},
+      sKey = #{record.skey,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.haier.po.Tclass">
+    update tclass
+    <set>
+      <if test="packagename != null">
+        packageName = #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null">
+        className = #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null">
+        sId = #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="skey != null">
+        sKey = #{skey,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.haier.po.Tclass">
+    update tclass
+    set packageName = #{packagename,jdbcType=VARCHAR},
+      className = #{classname,jdbcType=VARCHAR},
+      sId = #{sid,jdbcType=INTEGER},
+      sKey = #{skey,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

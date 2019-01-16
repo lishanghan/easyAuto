@@ -1,0 +1,401 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="lib/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>定制测试</title>
+    <script type="text/javascript" src="lib/loading.js"></script>
+</head>
+<body>
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 我的测试 <span
+        class="c-gray en">&gt;</span> 定制测试 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.reload();" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+    <!--查询条件Html-->
+    <div style="margin-left:10px;margin-top: 10px">
+        <label style="margin-left:30px;">id：</label>
+        <input type="number" name="query_custom_id" id="query_custom_id"
+               placeholder=" 定制id" style="width:5%"
+               class="input-text">
+
+        <label style="margin-left:30px;">定制名称：</label>
+        <input type="text" name="query_custom_name" id="query_custom_name"
+               placeholder=" 定制名称" style="width:12%"
+               class="input-text">
+
+        <label style="margin-left:30px;">环境：</label>
+        <span class="select-box" style="width:8%">
+                <select class="select" size="1" name="query_custom_env" id="query_custom_env">
+                    <option value="" selected>--请选择--</option>
+                </select>
+            </span>
+
+        <label style="margin-left:30px;">定制人：</label>
+        <span class="select-box" style="width:8%">
+                <select class="select" size="1" name="query_custom_user" id="query_custom_user">
+                    <option value="" selected>--请选择--</option>
+                </select>
+            </span>
+        <button name="find" id="find" style="margin-left:50px;width:80px" class="btn btn-success" type="button"
+                onclick="pageSkip(1)"><i class="Hui-iconfont">&#xe665;</i> 搜索
+        </button>
+        <button name="empty" id="empty" style="margin-left:10px;width:80px" class="btn btn-success" type="button"
+                onclick="empty()"><i class="Hui-iconfont">&#xe665;</i> 清空
+        </button>
+    </div>
+
+    <!--列表表头及分页Html-->
+    <div class="cl pd-5 bg-1 bk-gray mt-10">
+		<span class="l">
+			<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i
+                    class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+			<a class="btn btn-primary radius" href="javascript:;"
+               onclick="custom_add('添加定制测试','custom-add.html','100%','100%')"><i class="Hui-iconfont">&#xe600;</i> 添加定制</a>
+		</span>
+        <span class="r">共有数据：<strong id="total"></strong> 条</span>
+    </div>
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+        <table class="table table-border table-bordered table-hover table-bg">
+            <thead>
+            <tr class="text-c">
+                <th width="5%"><input type="checkbox" value="" name=""></th>
+                <th width="5%">id</th>
+                <th width="15%">定制名称</th>
+                <th width="20%">服务-测试类</th>
+                <th width="10%">环境</th>
+                <th width="10%">运行方式</th>
+                <th width="20%">运行策略</th>
+                <th width="5%">定制人</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+            <!--结果区-->
+            <tbody id="table">
+            </tbody>
+        </table>
+        <!--分页-->
+        <div class="dataTables_info" id="dataTables_info">
+            <span>共有 <strong id="totalPages"></strong> 页</span>
+            <span>当前第 <strong id="now"></strong> 页</span>
+        </div>
+        <div class="dataTables_paginate paging_simple_numbers" id="pager">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="static/hry-auto/util.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/select2/select2.full.js"></script>
+<script type="text/javascript" src="lib/select2/pinyin.js"></script>
+<script type="text/javascript">
+
+    var layerIndex;//loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex: -1,
+            beforeSend: function () { //插件加载前
+                this.layerIndex = layer.load(1, {shade: [0.01, '#fff']});
+            },
+            complete: function () { //完成加载后执行
+                layer.close(this.layerIndex); //完成加载后关闭loading
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+    });
+
+    //初始化
+    $(document).ready(function () {
+        env_selectEle_init("query_custom_env");
+        user_selectEle_init("query_custom_user");
+        var userId = $.cookie('uidCookie');
+        //默认选中当前登录人
+        $("#query_custom_user").val(userId).trigger("change");
+
+        pageSkip(1);
+
+        //老的未分页的代码
+        /*$.ajax({
+            type: "post",
+            url: "/tcustom/selectTcustomCustomByCondition",
+            data: {
+                userid: userId
+            },
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+
+                if (status == 0) {
+                    if (data.data == null) {
+                        var h = "<tr><td colspan='13' style='color:red;font-size:16px;text-align:center;border:0px'>没有数据！</td></td></tr>";
+                        $("#table").append(h);
+                        return;
+                    }
+                    var list = data.data;
+                    var total = list.length;
+                    //console.log(data);
+                    var html = "";
+                    for (var i = 0; i < list.length; i++) {
+                        var row = list[i];
+                        var customDetails = row.tcustomdetails;
+                        var ul = "";
+                        for (var k = 0; k < customDetails.length; k++) {
+                            var customDetail = customDetails[k];
+                            var serviceKey = "";
+                            var className = "";
+                            if (customDetail.classname != null) {
+                                className = customDetail.classname;
+                            }
+                            if (customDetail.clientlevel == 1) {
+                                //99%的情况 都不太可能直接定制整个类,所以"有定制"的说明暂时去掉
+                                //modify by luqiwei 20181015
+                                /!*                                if (customDetail.haschild == true) {
+                                                                    serviceKey = customDetail.clientname + "(有定制)-" + className;
+                                                                } else {
+                                                                    serviceKey = customDetail.clientname + "-" + className;
+                                                                }*!/
+                                serviceKey = customDetail.clientname + "-" + className;
+
+                            }
+                            var li = "<li>" + serviceKey + "</li>";
+                            ul = ul + li;
+                        }
+
+                        var strategy = "";
+                        if (row.strategy != null) {
+                            strategy = row.strategy;
+                        }
+
+
+                        var rowHtml = "<tr class=\"text-c\">\n" +
+                            "<td><input type=\"checkbox\" value=\"\" name=\"\"></td>\n" +
+                            "<td>" + row.id + "</td>\n" +
+                            "<td>" + row.customname + "</td>\n" +
+                            /!* "<td>"+service+"</td>\n" +*!/
+                            "<td style='text-align: left;'><ul id='serv'>" + ul + "</ul></td>\n" +
+                            "<td>" + row.envkey + "</td>\n" +
+                            "<td>" + strategy + "</td>\n" +
+                            "<td> " + row.username + "</td>" +
+                            "<td class=\"f-14\">" +
+                            "<a title=\"运行\" href=\"javascript:;\" onclick=\"custom_run(" + row.id + ",'" + row.customname + "')\" class=\"ml-5\" style=\"text-decoration:none;margin-right:8px;\"><i class=\"Hui-iconfont\">&#xe6e6;</i></a>" +
+                            "<a title=\"编辑\" href=\"javascript:;\" onclick=\"custom_edit('定制编辑','custom-edit.html'," + row.id + ",'100%','100%')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> \n" +
+                            "<a title=\"删除\" href=\"javascript:;\" onclick=\"custom_del(this," + row.id + ")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
+                            "</td>\n" +
+                            "</tr>";
+                        html = html + rowHtml;
+                    }
+                    $("#total").append(total);
+                    $("#table").append(html);
+
+                } else {
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+                $("tr:odd").css("background-color", "AliceBlue");
+            }
+        });*/
+
+    });
+    function pageSkip(index) {
+        if (index == 0) {
+            return;
+        }
+        //flag=true;
+        //查询条件
+        var query_id = $("#query_custom_id").val();
+        var query_customName = $("#query_custom_name").val();
+        var query_env = $("#query_custom_env").val();
+        var query_user = $("#query_custom_user").val();
+
+        $.ajax({
+            type: "post",
+            url: "/tcustom/selectTcustomCustomPageInfo",
+            data: {
+                id: query_id,
+                customname: query_customName,
+                envid: query_env,
+                userid: query_user,
+                pageNum: index,
+                pageSize: 10
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 0) {
+                    var list = response.data.list;//数据列表
+
+                    var tableHtml = "";
+                    for (var i = 0; i < list.length; i++) {
+                        var custom = list[i];
+                        var customDetails = list[i].tcustomdetails;
+                        var serviceColumnText = getServiceColumn(customDetails);
+
+                        var tableHtmlTr = "<tr class=\"text-c\">\n" +
+                            "<td><input type=\"checkbox\" value=\"\" name=\"\"></td>\n" +
+                            "<td>" + custom.id + "</td>\n" +
+                            "<td>" + custom.customname + "</td>\n" +
+                            "<td style='text-align: left;'><ul>" + serviceColumnText + "</ul></td>\n" +
+                            "<td>" + custom.envkey + "</td>\n" +
+                            "<td>" + (custom.intersect == 0 ? "顺序" : "交叉") + "</td>" +
+                            "<td>" + custom.strategy + "</td>\n" +
+                            "<td>" + custom.username + "</td>" +
+                            "<td class=\"f-14\">" +
+                            "<a id =\"butRun\" title=\"运行\" href=\"javascript:;\" customId=\""+custom.id+"\" customName=\""+custom.customname+"\" class=\"yunxing ml-5\" style=\"text-decoration:none;margin-right:8px;\"><i class=\"Hui-iconfont\">&#xe6e6;</i></a>" +
+                            "<a title=\"编辑\" href=\"javascript:;\" onclick=\"custom_edit('定制编辑','custom-edit.html'," + custom.id + ",'100%','100%')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> \n" +
+                            "<a title=\"复制\" href=\"javascript:;\"  onclick=\"custom_copy('定制复制','custom-add.html','100%','100%'," + custom.id + ",'1')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6ea;</i></a> \n" +
+                            "<a title=\"删除\" href=\"javascript:;\" onclick=\"custom_del(this," + custom.id + ")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
+                            "</td>\n" +
+                            "</tr>";
+                        tableHtml += tableHtmlTr;
+                    }
+                    $("#table").empty();
+                    $("#table").append(tableHtml);
+                    pagination(response);
+                    layer.close(layerIndex);
+
+                } else {
+                    layer_close(layerIndex);
+                    alert(response.msg);
+                }
+            },
+        });
+    }
+
+    function getServiceColumn(customDetails) {
+        var ul = "";
+        for (var k = 0; k < customDetails.length; k++) {
+            var customDetail = customDetails[k];
+            if (customDetail.clientlevel == 1) {
+                ul += "<li>" + customDetail.clientname + (customDetail.classname == null ? "" : "-" + customDetail.classname) + "</li>";
+            }
+        }
+        return ul;
+    }
+
+
+    /*定制测试-添加*/
+    function custom_add(title, url, w, h) {
+        layer_show1(title, url, w, h);
+    }
+
+    /*定制测试-复制*/
+    function custom_copy(title, url,w,h,id,skip) {
+        url = url + "?id=" + id+"&skip="+skip;
+        layer_show1(title, url, w, h);
+    }
+
+    /*定制测试-编辑*/
+    function custom_edit(title, url, id, w, h) {
+        url = url + "?id=" + id;
+        layer_show1(title, url, w, h);
+
+    }
+
+    /*定制测试-删除*/
+    function custom_del(obj, id) {
+        var ms = "是否删除测试定制，请确认!";
+        del_json(obj, id, "/tcustom/deleteOne", ms);
+
+    }
+
+    // 运行
+    $("#table").on("click",".yunxing",function(){
+        // layer.load(1, {
+        //     shade: [10,'#fff'] //0.1透明度的白色背景
+        // });
+        var $this = $(this);
+        var customId = $this.attr("customId");
+        var customName = $this.attr("customName");
+        var userId = $.cookie('uidCookie');
+        var userName=$.cookie("realnameCookie");
+        $this.attr("disabled",true);
+        $this.css("pointer-events","none");
+        $.ajax({
+            type: "post",
+            url: "/tcustom/runByTcustomId",
+            async:false,
+            data: {
+                customId: customId,
+                id: userId,
+                realname:userName
+            },
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+                var url = data.data;
+                if (status == 0) {
+                    url = encodeURI("../report-loading.html?reportName=" + url + "&customName=" + customName);
+                    window.open(url);
+                } else {
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+                setTimeout(function(){
+                    $this.css("pointer-events","auto");
+                },10000);
+            },
+            fail: function (data) {
+                layer.close(layerIndex);
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+                setTimeout(function(){
+                    $this.css("pointer-events","auto");
+                },10000);
+            },
+            error: function (xhr) {
+                layer.close(layerIndex);
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                });
+                setTimeout(function(){
+                    $this.css("pointer-events","auto");
+                },10000);
+            }
+        });
+    });
+
+    //清空查询条件
+    function empty() {
+        $("#query_custom_id").val("");
+        $("#query_custom_name").val("");
+        $("#query_custom_env").val("");
+        $("#query_custom_user").val(null).trigger("change");
+    }
+</script>
+</body>
+</html>

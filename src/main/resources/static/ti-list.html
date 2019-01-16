@@ -1,0 +1,361 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="lib/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>接口管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 接口管理 <span
+        class="c-gray en">&gt;</span> 接口列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div>
+        <label style="margin-left:30px">id：
+        </label><input type="number" name="id" id="id" placeholder=" 接口id"
+                       style="width:5%" class="input-text">
+        <!--<label style="margin-left:30px">服务：</label><input type="text" name="serviceid" id="serviceid" placeholder=" 服务标识/服务描述" style="width:12%" class="input-text">-->
+        <label style="margin-left:30px;">服务：</label>
+        <span class="select-box" style="width:6%">
+            <select class="select" size="1" name="serviceKey" id="serviceKey">
+                <option value="">-请选择-</option>
+            </select>
+            </span>
+        <label style="margin-left:30px">接口地址：</label><input type="text" name="iuri" id="iuri" placeholder=" 接口地址"
+                                                            style="width:12%" class="input-text">
+        <label style="margin-left:30px">接口描述：</label><input type="text" name="remark" id="remark" placeholder=" 接口描述"
+                                                            style="width:8%" class="input-text">
+
+        <!--<label style="margin-left:30px">开发者：</label><input type="text" name="idev" id="idev" placeholder=" 开发者" style="width:10%" class="input-text">-->
+        <label style="margin-left:30px;">开发者：</label>
+        <span class="select-box" style="width:8%">
+            <select class="select" size="1" name="idev" id="idev">
+                <option value="" selected>-请选择-</option>
+            </select>
+        </span>
+        <label style="margin-left:30px;">用例数：</label>
+        <span class="select-box" style="width:7%">
+            <select class="select" size="1" name="casecount" id="casecount">
+                <option value="" selected>-请选择-</option>
+                <option value="0"> 未设计用例 </option>
+                <option value="1"> 1个用例 </option>
+                <option value="2"> 2个用例 </option>
+                <option value="3"> 3个用例 </option>
+                <option value="4"> 4个及以上 </option>
+            </select>
+        </span>
+        <button name="find" id="find" style="margin-left:50px;width:80px;" class="btn btn-success" type="button"
+                onclick="pageSkip(1)"><i class="Hui-iconfont">&#xe665;</i> 搜接口
+        </button>
+        <button name="empty" id="empty" style="margin-left:10px;width:80px" class="btn btn-success" type="button"
+                onclick="empty()"><i class="Hui-iconfont">&#xe665;</i> 清空
+        </button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+                <i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+            </a>
+            <a href="javascript:;" onclick="interface_add('添加接口','ti-add.html','800','650')"
+               class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> 添加接口
+            </a>
+        </span>
+        <span class="r">共有数据：<strong id="total"></strong> 条</span></div>
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="3%"><input type="checkbox" name="" value=""></th>
+                <th width="5%">ID</th>
+                <th width="8%">服务</th>
+                <th width="22%" style="text-align:left;">接口地址</th>
+                <th width="18%" style="text-align:left;">接口描述</th>
+                <th width="7%">请求方式</th>
+                <th width="7%">iContentType</th>
+                <!--<th width="8%">请求参数类型</th>-->
+                <!--<th width="5%">返回类型</th>-->
+                <th width="5%">开发者</th>
+                <th width="5">用例数</th>
+                <th width="10%">更新时间</th>
+                <th width="10%">操作</th>
+            </tr>
+            </thead>
+            <tbody id="interfaceList">
+            </tbody>
+        </table>
+        <!--分页-->
+        <div class="dataTables_info" id="dataTables_info">
+            <span>共有 <strong id="totalPages"></strong> 页</span>
+            <span>当前第 <strong id="now"></strong> 页</span>
+        </div>
+        <div class="dataTables_paginate paging_simple_numbers" id="pager">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="static/hry-auto/util.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="lib/select2/select2.full.js"></script>
+<script type="text/javascript" src="lib/select2/pinyin.js"></script>
+<script type="text/javascript">
+    var layerIndex;
+    var w = document.body.clientWidth;
+    var h = document.body.clientHeight;
+    var width = w * 70 / 100;
+    var height = h * 95 / 100;
+    //loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex: -1,
+            beforeSend: function () { //插件加载前
+                this.layerIndex = layer.load(1, {shade: [0.01, '#fff']});
+                //$('#submit').val("正在加载请稍等...")
+            },
+            complete: function () { //完成加载后执行
+                layer.close(this.layerIndex); //完成加载后关闭loading
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+    });
+
+    function empty() {
+        //$("#serviceid").val("");
+        $("#id").val("");
+        $("#serviceKey option:first").prop("selected", 'selected');
+        $("#remark").val("");
+        $("#iuri").val("");
+        $("#idev").val(null).trigger("change");
+        //$("#idev").val("请选择").trigger("change");
+        $("#casecount").val("");
+
+    }
+
+    //查询接口列表
+    $(document).ready(function () {
+        var list = getServiceList();
+        var html = "";
+        for (var i = 0; i < list.length; i++) {
+            var row = list[i];
+            var rowHtml = "<option value=\"" + row.id + "\">" + row.servicekey + "</option>";
+            html = html + rowHtml;
+        }
+        $("#serviceKey").append(html);
+
+        var fromTiIid = null;
+        if (getParameter("fromTiIid") != null && getParameter("fromTiIid") != "") {//如果是链接跳转,这里选中
+            fromTiIid = getParameter("fromTiIid");
+            $("#id").val(fromTiIid);
+        }
+        var dev = getUserList();
+        var htmldev = "";
+        for (var k = 0; k < dev.length; k++) {
+            var rowHtml = "";
+            var row = dev[k];
+            rowHtml = "<option value=\"" + row.realname + "\">" + row.realname + "</option>";
+            htmldev = htmldev + rowHtml;
+        }
+        $("#idev").append(htmldev);
+        $("#idev").select2();
+        pageSkip(1);
+    });
+
+    //分页查询
+    function pageSkip(index) {
+        if (index == 0) {
+            return;
+        }
+        var id = $("#id").val();
+        var serviceKey = $("#serviceKey").val();
+        var remark = $("#remark").val();
+        var iUri = $("#iuri").val();
+        var iDev = $("#idev").val();
+        var caseCount = $("#casecount").val();
+        var allEnum = getAllEnum();
+        var ContentTypeEnum = allEnum.ContentTypeEnum;
+        /*var ResponseTypeEnum = allEnum.ResponseTypeEnum;*/
+
+        $.ajax({
+            type: "post",
+            url: "/ti/selectByCondition",
+            data: {
+                id: id,
+                iuri: iUri,
+                idev: iDev,
+                casecount: caseCount,
+                serviceid: serviceKey,
+                remark: remark,
+                pageNum: index,
+                pageSize: 10
+            },
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+
+                console.log(data);
+                var html = "";
+
+                if (status == 0) {
+                    var list = data.data.list;
+                    $("#interfaceList").html("");
+
+                    for (var i = 0; i < list.length; i++) {
+                        var ti = list[i];
+                        var iRequestMethod = "";
+                        if (ti.irequestmethod == 1) {
+                            iRequestMethod = "post";
+                        } else if (ti.irequestmethod == 2) {
+                            iRequestMethod = "get";
+                        }
+
+                        var remark = "";
+                        if (ti.remark != null) {
+                            remark = ti.remark;
+                        }
+
+                        var iContentType = "";
+                        for (var m = 0; m < ContentTypeEnum.length; m++) {
+                            var row1 = ContentTypeEnum[m];
+                            if (ti.icontenttype == row1.id) {
+                                iContentType = row1.value;
+                            }
+                        }
+                        var trColor = "#f93e3e";
+                        var trStyle = "";
+                        var caseCountHtml = "<a title=\"查看用例\" href=\"javascript:void(0);\" onclick=\"tcase_list('我的用例','tcase-list.html','" + ti.id + "')\" style=\"text-decoration: underline;color:#0000ff;\" >" + ti.casecount + "</a>"
+                        if (ti.casecount == 0) {
+                            trStyle = "style=\"color: " + trColor + "\";";
+                            caseCountHtml = ti.casecount;
+                        }
+                        var iDev = ti.idev == null ? "" : ti.idev;
+                        //console.log("iDev:"+iDev);
+                        /** 请求参数类型和返回值类型由于现在100%都是JSON,所以在列表中隐藏这两个字段,详情页仍可见*/
+                        /*var iParamType = "";
+                        for (var n = 0; n < ResponseTypeEnum.length; n++) {
+                            var row2 = ResponseTypeEnum[n];
+                            if (row.iparamtype == row2.id) {
+                                iParamType = row2.value;
+                            }
+                        }
+
+                        var iResponseType = "";
+                        for (var k = 0; k < ResponseTypeEnum.length; k++) {
+                            var row3 = ResponseTypeEnum[k];
+                            if (row.iresponsetype == row3.id) {
+                                iResponseType = row3.value;
+                            }
+                        }*/
+
+                        var rowHtml = "<tr class=\"text-c\" " + trStyle + ">\n" +
+                            "<td><input name=\"\" type=\"checkbox\" value=\"\"></td>\n" +
+                            "<td>" + ti.id + "</td>\n" +
+                            "<td>" + ti.servicekey + "</td>\n" +
+                            "<td style=\"text-align:left;\">" + ti.iuri + "</td>\n" +
+                            "<td >" + remark + "</td>\n" +
+                            "<td >" + iRequestMethod + "</td>\n" +
+                            "<td>" + iContentType + "</td>\n" +
+                            /* "<td>" + iParamType + "</td>\n" +
+                             "<td>" + iResponseType + "</td>\n" +*/
+                            "<td>" + iDev + "</td>\n" +
+                            "<td>" + caseCountHtml + "</td>\n" +
+                            "<td>" + ti.updatetime + "</td>\n" +
+                            "<td class=\"f-14\">" +
+                            "<a title=\"新增用例\" href=\"javascript:;\" onclick=\"tcase_add('新增用例','tcase-add.html'," + ti.serviceid + ",'" + ti.id + "','" + width + "','" + height + "')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6f2; </i></a>" +
+                            "<a title=\"编辑\" href=\"javascript:;\" onclick=\"ti_edit('接口编辑','ti-edit.html'," + ti.id + ",'" + width + "','" + height + "')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a>" +
+                            "<a title=\"作废\" href=\"javascript:;\" onclick=\"ti_cancel(this," + ti.id + ")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6a6;</i></a>" +
+                            "<a title=\"删除\" href=\"javascript:;\" onclick=\"ti_del(this," + ti.id + ")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
+                            "</td>\n" +
+                            "</tr>";
+                        html = html + rowHtml;
+                    }
+                    $("#interfaceList").append(html);
+                    pagination(data);
+                    layer.close(layerIndex);
+
+                } else {
+                    layer.close(layerIndex);
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+            }
+        });
+    }
+
+    //添加接口
+    function interface_add(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    function tcase_add(title, url, fromTiSid, fromTiIid, w, h) {
+        url = url + "?fromTiSid=" + fromTiSid + "&fromTiIid=" + fromTiIid;
+        layer_show(title, url, w, h);
+    }
+
+    function tcase_list(title, url, fromTiIid) {
+        url = url + "?fromTiIid=" + fromTiIid;
+        creatIframe(url, title);
+        min_titleList();
+    }
+
+    //编辑接口
+    function ti_edit(title, url, id, w, h) {
+        url = url + "?id=" + id;
+        layer_show(title, url, w, h);
+    }
+
+    //作废接口
+    function ti_cancel(obj, id) {
+        /* layer.confirm("作废接口将会连带删除此接口关联的用例,并且一键导入时,也不会重新导入此接口,确认作废?")
+         cancelTi(id)
+         //window.location.reload();*/
+        layer.confirm('作废接口将会连带删除此接口关联的用例,并且一键导入时,也不会重新导入此接口,确认作废?', {
+            btn: ['作废', '取消'] //按钮
+        }, function () {
+            cancelTi(id)
+            layer.msg('已作废', {icon: 1});
+            pageSkip(1);
+        });
+
+
+    }
+
+    //删除接口
+    function ti_del(obj, id) {
+        var ms = "请确认是否要删除id=" + id + "的接口数据,警告:接口删除时,将会连带删除接口关联的所有用例,确定?";
+        del(obj, id, "/ti/deleteOne", ms);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]-->
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="lib/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]-->
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <!--/meta 作为公共模版分离出去-->
+    <title>接口编辑</title>
+</head>
+<body>
+<article class="page-container">
+    <form method="post" class="form form-horizontal" id="form">
+    </form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="static/hry-auto/util.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/select2/select2.full.js"></script>
+<script type="text/javascript" src="lib/select2/pinyin.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+    var layerIndex;
+    //loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex: -1,
+            beforeSend: function () { //插件加载前
+                layerIndex = layer.load(1, {shade: [1.01, '#fff']});
+                $('#admin-role-save').val("正在提交请稍等...")
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+    });
+
+    function getParameter(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    //获取服务列表数组
+    function getService() {
+        var service = new Array();
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "post",
+            url: "/tservice/selectByCondition",
+            data: {
+                pageNum: 1,
+                pageSize: 1000
+            },
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+                var list = data.data.list;
+                if (status == 0) {
+                    service = list;
+                } else {
+                    layer.alert(JSON.stringify(data), {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                })
+            }
+        });
+        //alert("服务数组长度="+(service.length));
+        return service;
+    }
+
+    //获取枚举值数组
+    function getAllEnum() {
+        var allEnum = null;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "get",
+            url: "/enum/allEnum",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                allEnum = data;
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                })
+            }
+        });
+        return allEnum;
+    }
+
+
+    function devGroup() {
+        var dev = null;
+        var groupId = $.cookie('groupidCookie');
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "post",
+            url: "/user/selectDever",
+            data: {
+                groupId: groupId
+            },
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+                if (status == 0) {
+                    dev = data.data;
+                } else {
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                })
+            }
+        });
+        return dev;
+    }
+
+    //页面加载处理
+    $(document).ready(function () {
+        var id = getParameter('id');
+        $("#id").val(id);
+        //alert("要编辑的接口id="+id);
+
+        $.ajax({
+            type: "post",
+            url: "/ti/selectOne",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function (data) {
+
+                var status = data.status;
+                var msg = data.msg;
+                var list = data.data;
+                console.log(data);
+
+                if (status == 0) {
+                    var id = list.id;
+                    var serviceid = list.serviceid;
+                    var iuri = list.iuri;
+                    var remark = "";
+                    if (list.remark != null) {
+                        remark = list.remark;
+                    }
+                    var irequestmethod = list.irequestmethod;
+                    var icontenttype = list.icontenttype;
+                    var iparamtype = list.iparamtype;
+
+                    var iheadersample = list.iheadersample;
+                    if (iheadersample != null) {
+                        try {
+                            var requestHeaderJson = JSON.stringify(JSON.parse(iheadersample), null, 2);
+                            iheadersample = requestHeaderJson;
+                        } catch (e) {
+
+                        }
+                    } else {
+                        iheadersample = "";
+                    }
+
+                    var iparamsample = list.iparamsample;
+                    if (iparamsample == null) {
+                        iparamsample = "";
+                    } else {
+                        if (iparamtype == 1) {
+                            try {
+                                var requestJson = JSON.stringify(JSON.parse(iparamsample), null, 2);
+                                iparamsample = requestJson;
+                            } catch (e) {
+                            }
+                        }
+                    }
+                    var iresponsetype = list.iresponsetype;
+                    var idev = list.idev;
+                    var services = getService();
+                    var allEnum = getAllEnum();
+
+                    var service = "";
+                    for (var i = 0; i < services.length; i++) {
+                        var option = "";
+                        var row = services[i];
+                        if (serviceid == row.id) {
+                            option = "<option value=\"" + row.id + "\" selected>" + row.servicekey + "</option>";
+                        } else {
+                            option = "<option value=\"" + row.id + "\">" + row.servicekey + "</option>";
+                        }
+                        service = service + option;
+                    }
+
+                    var requestMethod = "";
+                    var RequestMethodTypeEnum = allEnum.RequestMethodTypeEnum;
+                    for (var i = 0; i < RequestMethodTypeEnum.length; i++) {
+                        var option = "";
+                        var row1 = RequestMethodTypeEnum[i];
+                        if (irequestmethod == row1.id) {
+                            option = "<option value=\"" + row1.id + "\" selected>" + row1.value + "</option>";
+                        } else {
+                            option = "<option value=\"" + row1.id + "\">" + row1.value + "</option>";
+                        }
+                        requestMethod = requestMethod + option;
+                    }
+
+                    var contentType = "";
+                    var ContentTypeEnum = allEnum.ContentTypeEnum;
+                    for (var i = 0; i < ContentTypeEnum.length; i++) {
+                        var option = "";
+                        var row2 = ContentTypeEnum[i];
+                        if (icontenttype == row2.id) {
+                            option = "<option value=\"" + row2.id + "\" selected>" + row2.value + "</option>";
+                        } else {
+                            option = "<option value=\"" + row2.id + "\">" + row2.value + "</option>";
+                        }
+                        contentType = contentType + option;
+                    }
+
+                    var paramType = "";
+                    var ResponseTypeEnum = allEnum.ResponseTypeEnum;
+                    for (var i = 0; i < ResponseTypeEnum.length; i++) {
+                        var option = "";
+                        var row3 = ResponseTypeEnum[i];
+                        if (iparamtype == row3.id) {
+                            option = "<option value=\"" + row3.id + "\" selected>" + row3.value + "</option>";
+                        } else {
+                            option = "<option value=\"" + row3.id + "\">" + row3.value + "</option>";
+                        }
+                        paramType = paramType + option;
+                    }
+
+                    var responseType = "";
+                    for (var i = 0; i < ResponseTypeEnum.length; i++) {
+                        var option = "";
+                        var row4 = ResponseTypeEnum[i];
+                        if (iresponsetype == row4.id) {
+                            option = "<option value=\"" + row4.id + "\" selected>" + row4.value + "</option>";
+                        } else {
+                            option = "<option value=\"" + row4.id + "\">" + row4.value + "</option>";
+                        }
+                        responseType = responseType + option;
+                    }
+
+                    var devhtml = "";
+                    var dev = devGroup();
+                    for (var i = 0; i < dev.length; i++) {
+                        if (idev == dev[i].realname) {
+                            devhtml += "<option value=\"" + dev[i].realname + "\" selected>" + dev[i].realname + "</option>";
+                        } else {
+                            devhtml += "<option value=\"" + dev[i].realname + "\">" + dev[i].realname + "</option>";
+                        }
+                    }
+
+
+                    var html = "<div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\"><span class=\"c-red\">*</span>服务：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <span class=\"select-box\">\n" +
+                        "                    <select class=\"select\" size=\"1\" name=\"serviceid\" id=\"serviceid\">\n" +
+                        "                        " + service + "" +
+                        "                    </select>\n" +
+                        "                </span>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\"><span class=\"c-red\">*</span>接口地址：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <input type=\"text\" class=\"input-text\" value=\"" + iuri + "\" placeholder=\"\" id=\"iuri\" name=\"iuri\">\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\"><span class=\"c-red\">*</span>接口描述：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <input type=\"text\" class=\"input-text\" value=\"" + remark + "\" placeholder=\"\" id=\"remark\" name=\"remark\">\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\">请求方式：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <span class=\"select-box\">\n" +
+                        "                    <select class=\"select\" size=\"1\" name=\"irequestmethod\" id=\"irequestmethod\">\n" +
+                        "                        " + requestMethod + "" +
+                        "                    </select>\n" +
+                        "                </span>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\">iContentType：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <span class=\"select-box\">\n" +
+                        "                    <select class=\"select\" size=\"1\" name=\"icontenttype\" id=\"icontenttype\">\n" +
+                        "                        " + contentType + "" +
+                        "                    </select>\n" +
+                        "                </span>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\">示例Header：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <textarea id=\"iheadersample\" name=\"iheadersample\" cols=\"\" rows=\"\" class=\"textarea valid\" placeholder=\"请输入示例Header...\">" + iheadersample + "</textarea>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\">请求参数类型：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <span class=\"select-box\">\n" +
+                        "                    <select class=\"select\" size=\"1\" name=\"iparamtype\" id=\"iparamtype\">\n" +
+                        "                        " + paramType + "" +
+                        "                    </select>\n" +
+                        "                </span>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\">请求参数示例：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <textarea id=\"iparamsample\" name=\"iparamsample\" cols=\"\" rows=\"\" class=\"textarea valid\" placeholder=\"请输入示例参数...\">" + iparamsample + "</textarea>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\">返回值类型：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "                <span class=\"select-box\">\n" +
+                        "                    <select class=\"select\" size=\"1\" name=\"iresponsetype\" id=\"iresponsetype\">\n" +
+                        "                        " + responseType + "" +
+                        "                    </select>\n" +
+                        "                </span>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <label class=\"form-label col-xs-4 col-sm-3\">接口开发人员：</label>\n" +
+                        "            <div class=\"formControls col-xs-8 col-sm-9\">\n" +
+                        "               <span class=\"select-box\">\n" +
+                        "                    <select class=\"select\" size=\"1\" name=\"idev\" id=\"idev\">\n" +
+                        "                    <option value=\"\">请选择</option>\n" +
+                        "                        " + devhtml + "\n" +
+                        "                    </select>\n" +
+                        "               </span>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "        <div class=\"row cl\">\n" +
+                        "            <div class=\"col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3\">\n" +
+                        "                <button type=\"button\" class=\"btn btn-success radius\" id=\"admin-role-save\" name=\"admin-role-save\" onclick=\"editTi(" + id + ")\"><i class=\"icon-ok\"></i> 提交</button>\n" +
+                        "                <button type=\"button\" class=\"btn btn-success radius\" id=\"admin-role-cancel\" name=\"admin-role-cancel\" onclick=\"cancel_ti(this," + id + ")\"><i class=\"icon-ok\"></i> 作废</button>\n" +
+                        "                <button type=\"button\" class=\"btn btn-success radius\" id=\"admin-role-close\" name=\"admin-role-close\" onclick=\"layer_close()\"><i class=\"icon-ok\"></i> 关闭</button>\n" +
+                        "</div>\n" +
+                        "        </div>";
+
+                    $("#form").append(html);
+                    $("#idev").select2();
+                    layer.close(layerIndex);
+                    // if(idev == "自动导入"){
+                    //     document.getElementById("autoReport").style.display = "block";
+                    // }
+                } else {
+                    layer.close(layerIndex);
+                    layer.alert(JSON.stringify(data), {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+
+            }
+        });
+
+
+    });
+
+    //作废
+    function cancel_ti(obj,id){
+        layer.confirm('作废接口将会连带删除此接口关联的用例,并且一键导入时,也不会重新导入此接口,确认作废?', {
+            btn: ['作废','取消'] //按钮
+        }, function(){
+            cancelTi(id)
+            layer.msg('已作废', {icon: 1});
+            window.parent.pageSkip(1);
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+
+        });
+    }
+
+    //编辑接口
+    function editTi(tiId) {
+        var id = tiId;
+        var serviceid = $("#serviceid").val();
+        var iuri = $("#iuri").val();
+        var remark = $("#remark").val();
+        var irequestmethod = $("#irequestmethod").val();
+        var iheadersample = $("#iheadersample").val();
+        var icontenttype = $("#icontenttype").val();
+        var iparamtype = $("#iparamtype").val();
+        var iparamsample = $("#iparamsample").val();
+        var iresponsetype = $("#iresponsetype").val();
+        var idev = $("#idev").val();
+
+        if (serviceid == null || serviceid == "") {
+            layer.msg("请选择服务！");
+            return;
+        } else if (iuri == null || iuri == "") {
+            layer.msg("接口地址不能为空！");
+            return;
+        } else if (remark == null || remark == "") {
+            layer.msg("接口描述不能为空！");
+            return;
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/ti/updateOne',
+                data: {
+                    id: id,
+                    serviceid: serviceid,
+                    iuri: iuri,
+                    remark: remark,
+                    irequestmethod: irequestmethod,
+                    iheadersample: iheadersample,
+                    icontenttype: icontenttype,
+                    iparamtype: iparamtype,
+                    iparamsample: iparamsample,
+                    iresponsetype: iresponsetype,
+                    idev: idev,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var status = data.status;
+                    var msg = data.msg;
+                    var list = data.data;
+
+                    if (status == 0) {
+                        layer.close(layerIndex);
+                        //alert("更新成功！");
+                        //parent.window.location.reload();
+                        window.parent.pageSkip(1);
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    } else {
+                        layer.close(layerIndex);
+                        layer.alert(msg, {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        });
+                    }
+
+                },
+                error: function (xhr) {
+                    layer.alert('Error' + JSON.stringify(xhr), {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                },
+            });
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.TcaseMapper">
+  <resultMap id="BaseResultMap" type="com.haier.po.Tcase">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="caseName" jdbcType="VARCHAR" property="casename" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="serviceId" jdbcType="INTEGER" property="serviceid" />
+    <result column="iId" jdbcType="INTEGER" property="iid" />
+    <result column="envId" jdbcType="INTEGER" property="envid" />
+    <result column="testClass" jdbcType="VARCHAR" property="testclass" />
+    <result column="requestHeader" jdbcType="VARCHAR" property="requestheader" />
+    <result column="requestParam" jdbcType="VARCHAR" property="requestparam" />
+    <result column="assertType" jdbcType="INTEGER" property="asserttype" />
+    <result column="expected" jdbcType="VARCHAR" property="expected" />
+    <result column="cAfter" jdbcType="VARCHAR" property="cafter" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, caseName, remark, serviceId, iId, envId, testClass, requestHeader, requestParam, 
+    assertType, expected, cAfter, status, author, updateTime
+  </sql>
+  <select id="selectByExample" parameterType="com.haier.po.TcaseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tcase
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tcase
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tcase
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.haier.po.TcaseExample">
+    delete from tcase
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.haier.po.Tcase">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tcase (caseName, remark, serviceId, 
+      iId, envId, testClass, 
+      requestHeader, requestParam, assertType, 
+      expected, cAfter, status, 
+      author, updateTime)
+    values (#{casename,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{serviceid,jdbcType=INTEGER}, 
+      #{iid,jdbcType=INTEGER}, #{envid,jdbcType=INTEGER}, #{testclass,jdbcType=VARCHAR}, 
+      #{requestheader,jdbcType=VARCHAR}, #{requestparam,jdbcType=VARCHAR}, #{asserttype,jdbcType=INTEGER}, 
+      #{expected,jdbcType=VARCHAR}, #{cafter,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{author,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.haier.po.Tcase">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tcase
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="casename != null">
+        caseName,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="serviceid != null">
+        serviceId,
+      </if>
+      <if test="iid != null">
+        iId,
+      </if>
+      <if test="envid != null">
+        envId,
+      </if>
+      <if test="testclass != null">
+        testClass,
+      </if>
+      <if test="requestheader != null">
+        requestHeader,
+      </if>
+      <if test="requestparam != null">
+        requestParam,
+      </if>
+      <if test="asserttype != null">
+        assertType,
+      </if>
+      <if test="expected != null">
+        expected,
+      </if>
+      <if test="cafter != null">
+        cAfter,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="casename != null">
+        #{casename,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceid != null">
+        #{serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="iid != null">
+        #{iid,jdbcType=INTEGER},
+      </if>
+      <if test="envid != null">
+        #{envid,jdbcType=INTEGER},
+      </if>
+      <if test="testclass != null">
+        #{testclass,jdbcType=VARCHAR},
+      </if>
+      <if test="requestheader != null">
+        #{requestheader,jdbcType=VARCHAR},
+      </if>
+      <if test="requestparam != null">
+        #{requestparam,jdbcType=VARCHAR},
+      </if>
+      <if test="asserttype != null">
+        #{asserttype,jdbcType=INTEGER},
+      </if>
+      <if test="expected != null">
+        #{expected,jdbcType=VARCHAR},
+      </if>
+      <if test="cafter != null">
+        #{cafter,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.haier.po.TcaseExample" resultType="java.lang.Long">
+    select count(*) from tcase
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tcase
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.casename != null">
+        caseName = #{record.casename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceid != null">
+        serviceId = #{record.serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="record.iid != null">
+        iId = #{record.iid,jdbcType=INTEGER},
+      </if>
+      <if test="record.envid != null">
+        envId = #{record.envid,jdbcType=INTEGER},
+      </if>
+      <if test="record.testclass != null">
+        testClass = #{record.testclass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestheader != null">
+        requestHeader = #{record.requestheader,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestparam != null">
+        requestParam = #{record.requestparam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.asserttype != null">
+        assertType = #{record.asserttype,jdbcType=INTEGER},
+      </if>
+      <if test="record.expected != null">
+        expected = #{record.expected,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cafter != null">
+        cAfter = #{record.cafter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.author != null">
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatetime != null">
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tcase
+    set id = #{record.id,jdbcType=INTEGER},
+      caseName = #{record.casename,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      serviceId = #{record.serviceid,jdbcType=INTEGER},
+      iId = #{record.iid,jdbcType=INTEGER},
+      envId = #{record.envid,jdbcType=INTEGER},
+      testClass = #{record.testclass,jdbcType=VARCHAR},
+      requestHeader = #{record.requestheader,jdbcType=VARCHAR},
+      requestParam = #{record.requestparam,jdbcType=VARCHAR},
+      assertType = #{record.asserttype,jdbcType=INTEGER},
+      expected = #{record.expected,jdbcType=VARCHAR},
+      cAfter = #{record.cafter,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      author = #{record.author,jdbcType=VARCHAR},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.haier.po.Tcase">
+    update tcase
+    <set>
+      <if test="casename != null">
+        caseName = #{casename,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceid != null">
+        serviceId = #{serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="iid != null">
+        iId = #{iid,jdbcType=INTEGER},
+      </if>
+      <if test="envid != null">
+        envId = #{envid,jdbcType=INTEGER},
+      </if>
+      <if test="testclass != null">
+        testClass = #{testclass,jdbcType=VARCHAR},
+      </if>
+      <if test="requestheader != null">
+        requestHeader = #{requestheader,jdbcType=VARCHAR},
+      </if>
+      <if test="requestparam != null">
+        requestParam = #{requestparam,jdbcType=VARCHAR},
+      </if>
+      <if test="asserttype != null">
+        assertType = #{asserttype,jdbcType=INTEGER},
+      </if>
+      <if test="expected != null">
+        expected = #{expected,jdbcType=VARCHAR},
+      </if>
+      <if test="cafter != null">
+        cAfter = #{cafter,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.haier.po.Tcase">
+    update tcase
+    set caseName = #{casename,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      serviceId = #{serviceid,jdbcType=INTEGER},
+      iId = #{iid,jdbcType=INTEGER},
+      envId = #{envid,jdbcType=INTEGER},
+      testClass = #{testclass,jdbcType=VARCHAR},
+      requestHeader = #{requestheader,jdbcType=VARCHAR},
+      requestParam = #{requestparam,jdbcType=VARCHAR},
+      assertType = #{asserttype,jdbcType=INTEGER},
+      expected = #{expected,jdbcType=VARCHAR},
+      cAfter = #{cafter,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      author = #{author,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

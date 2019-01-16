@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>服务列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 服务管理 <span
+        class="c-gray en">&gt;</span>服务列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                             href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div>
+        <label style="margin-left:50px">服务id：</label><input type="number" name="id" id="id" placeholder=" 服务id"
+                                                            style="width:12%" class="input-text">
+        <label style="margin-left:50px">服务标识：</label><input type="text" name="servicekey" id="servicekey"
+                                                            placeholder=" 服务标识" style="width:12%" class="input-text">
+        <label style="margin-left:50px">服务描述：</label><input type="text" name="servicename" id="servicename"
+                                                            placeholder=" 服务描述" style="width:12%" class="input-text">
+        <button name="find" id="find" style="margin-left:50px;width:100px;" class="btn btn-success" type="button"
+                onclick="pageSkip(1)"><i class="Hui-iconfont">&#xe665;</i> 搜服务
+        </button>
+        <button name="empty" id="empty" style="margin-left:10px;width:100px;" class="btn btn-success" type="button"
+                onclick="empty()"><i class="Hui-iconfont">&#xe665;</i> 清空
+        </button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i
+                    class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+            <a class="btn btn-primary radius" onclick="tservice_add('添加服务','tservice-add.html','800','400')"
+               href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加服务</a>
+        </span>
+        <span class="r">共有数据：<strong id="total">0</strong> 条</span>
+    </div>
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+        <table class="table table-border table-bordered table-bg table-hover table-sort" id="table">
+            <thead>
+            <tr class="text-c">
+                <th width="5%"><input name="" type="checkbox" value=""></th>
+                <th width="5%">ID</th>
+                <th width="15%">服务标识</th>
+                <th width="25%">服务描述</th>
+                <th width="10%">默认测试类</th>
+                <th width="10%">协议类型</th>
+                <th width="10%">更新时间</th>
+                <th width="10%">负责人</th>
+                <th width="10%">操作</th>
+            </tr>
+            </thead>
+            <tbody id="teserviceList">
+            </tbody>
+        </table>
+        <!--分页-->
+        <div class="dataTables_info" id="dataTables_info">
+            <span>共有 <strong id="totalPages"></strong> 页</span>
+            <span>当前第 <strong id="now"></strong> 页</span>
+        </div>
+        <div class="dataTables_paginate paging_simple_numbers" id="pager">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="static/hry-auto/util.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+    var layerIndex;
+    //loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex: -1,
+            beforeSend: function () { //插件加载前
+                layerIndex = layer.load(1, {shade: [0.01, '#fff']});
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+    });
+
+    //查询环境列表
+    $(document).ready(function () {
+        pageSkip(1);
+    });
+
+    function empty() {
+        $("#id").val("");
+        $("#servicekey").val("");
+        $("#servicename").val("");
+    }
+
+    //分页查询
+    function pageSkip(index) {
+        if (index == 0) {
+            return;
+        }
+        var id = $("#id").val();
+        var servicekey = $("#servicekey").val();
+        var servicename = $("#servicename").val();
+        $.ajax({
+            type: "post",
+            url: "/tservice/selectByCondition",
+            data: {
+                id: id,
+                servicekey: servicekey,
+                servicename: servicename,
+                pageNum: index,
+                pageSize: 10
+            },
+            dataType: "json",
+            success: function (data) {
+
+                var status = data.status;
+                var msg = data.msg;
+                var list = data.data.list;
+                console.log(data);
+                var html = "";
+
+                if (status == 0) {
+                    $("#teserviceList").html("");
+
+                    for (var i = 0; i < list.length; i++) {
+                        var row = list[i];
+                        var type = "";
+                        if (row.httptype == 1) {
+                            type = "Http";
+                        } else if (row.httptype == 2) {
+                            type = "Https";
+                        }
+
+                        var servicename = "";
+                        if (row.servicename != null) {
+                            servicename = row.servicename;
+                        }
+
+                        var classname = "";
+                        if (row.classname != null) {
+                            classname = row.classname;
+                        }
+
+                        var editor = "";
+                        if (row.editor != null) {
+                            editor = row.editor;
+                        }
+
+
+                        var rowHtml = "<tr class=\"text-c\">\n" +
+                            "<td><input name=\"\" type=\"checkbox\" value=\"\"></td>\n" +
+                            "<td>" + row.id + "</td>\n" +
+                            "<td>" + row.servicekey + "</td>\n" +
+                            "<td>" + servicename + "</td>\n" +
+                            "<td>" + classname + "</td>\n" +
+                            "<td >" + type + "</td>\n" +
+                            "<td>" + row.updatetime + "</td>\n" +
+                            "<td>" + editor + "</span></td>\n" +
+                            "<td class=\"f-14\"><a title=\"编辑\" href=\"javascript:;\" onclick=\"tservice_edit('服务编辑','tservice-edit.html'," + row.id + ",'800','400')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> \n" +
+                            "<a title=\"删除\" href=\"javascript:;\" onclick=\"tservice_del(this," + row.id + ")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a></td>\n" +
+                            "</tr>";
+                        html = html + rowHtml;
+                    }
+
+                    $("#teserviceList").append(html);
+                    pagination(data);
+                    layer.close(layerIndex);
+                } else {
+                    layer.close(layerIndex);
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+            }
+        });
+    }
+
+    /*服务-添加*/
+    function tservice_add(title, url, w, h) {
+        layer_show(title, url, w, h);
+
+    }
+
+    /*服务-编辑*/
+    function tservice_edit(title, url, id, w, h) {
+        url = url + "?id=" + id;
+        layer_show(title, url, w, h);
+    }
+
+    /*服务-删除*/
+    function tservice_del(obj, id) {
+        var ms = "服务删除将会连带删除接口,连带删除用例,确认?";
+        del(obj, id, "/tservice/deleteOne", ms);
+    }
+
+</script>
+</body>
+</html>

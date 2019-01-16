@@ -1,0 +1,188 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="lib/login/normalize.css">
+    <link type="text/css" rel="stylesheet" href="lib/login/component.css">
+    <link href="static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css"/>
+    <link href="static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>登录</title>
+    <meta name="keywords" content="hry">
+    <meta name="description" content="hry auto">
+    <style>
+        #loginform{
+            border:2px solid #eec6ce;
+            border-radius: 10px;
+        }
+        .Hui-iconfont{
+            color:#eec6ce;
+        }
+        #identity,#password{
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body onkeydown="enterkey(event)">
+<input type="hidden" id="TenantId" name="TenantId" value=""/>
+<div class="header"></div>
+<div class="loginWraper">
+    <div id="loginform" class="loginBox">
+        <form class="form form-horizontal" action="#">
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+                <div class="formControls col-xs-8">
+                    <input id="identity" name="identity" type="text" placeholder="邮箱(可只填写用户标识符即可)"
+                           class="input-text size-L">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe63f;</i></label>
+                <div class="formControls col-xs-8">
+                    <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L">
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="formControls col-xs-8 col-xs-offset-3">
+                    <input id="login" name="login" type="button" class="btn btn-success radius size-L"
+                           value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;" onclick="login_submit()">
+                    <input name="" type="reset" class="btn btn-default radius size-L"
+                           value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="lib/login/TweenLite.min.js"></script>
+<script type="text/javascript" src="lib/login/EasePack.min.js"></script>
+<script type="text/javascript" src="lib/login/rAF.js"></script>
+<div class="footer">Copyright 很容易测试 contact: luqiwei@legain.com , lishanghan@legain.com</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<!--<script type="text/javascript" src="lib/jquery.hotkeys.js"></script>-->
+<script type="text/javascript">
+    var layerIndex;
+
+    function enterkey(et) {
+
+        if (et.keyCode) {
+            if (et.keyCode == 13)
+                $('#login').click();
+        } else {
+            if (et.which == 13)
+                $('#login').click();
+        }
+
+    }
+
+    /*$(document).ready(function(){
+        $("body").keydown(function() {
+            if (event.keyCode == "13") {
+                $('#login').click();
+            }
+        });
+    });*/
+
+    //loading
+    /*$(function () {
+        $.ajaxSetup({
+            layerIndex:-1,
+            beforeSend: function () { //插件加载前
+               // this.layerIndex = layer.load(1, { shade: [1.01, '#fff'] });
+                this.layerIndex = layer.msg('登录中，请稍等...', {
+                    icon: 16
+                    ,shade: 0.01
+                });
+                //$('#login').val("正在登录请稍等...")
+            },
+            complete: function () { //完成加载后执行
+                //layer.close(this.layerIndex); //完成加载后关闭loading
+
+            },
+            success: function(){
+                //layer.close(this.layerIndex); //完成加载后关闭loading
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    skin: 'layui-layer-molv'
+                    , closeBtn: 0
+                    , shift: 4 //动画类型
+                });
+            }
+        });
+    });*/
+    //登录处理
+    function login_submit() {
+
+        var identity = $("#identity").val();
+        var password = $("#password").val();
+
+        if (identity == null || identity == "") {
+            layer.msg("用户名不能为空！");
+        } else if (password == null || password == "") {
+            layer.msg("密码不能为空！");
+        } else {
+            layerIndex = layer.msg('登录中，请稍等...', {
+                icon: 16,
+                shade: 0.01,
+                time: false
+            });
+            $.ajax({
+                type: 'POST',
+                url: '/user/login',
+                data: {
+                    identity: identity,
+                    password: password
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var status = data.status;
+                    var msg = data.msg;
+                    if (status == 0) {
+                        window.location.href = "index.html";
+                    } else {
+                        layer.close(layerIndex);
+                        layer.alert(msg, {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        })
+                    }
+
+                },
+                complete: function () {
+                    layer.close(layerIndex);
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    layer.alert('显示异常，请刷新后重试', {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                },
+            });
+
+        }
+
+
+    }
+
+
+</script>
+</body>
+</html>

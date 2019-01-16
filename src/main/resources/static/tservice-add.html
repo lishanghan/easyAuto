@@ -1,0 +1,267 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]-->
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="lib/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]-->
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <!--/meta 作为公共模版分离出去-->
+    <title>新增服务</title>
+</head>
+<body>
+<article class="page-container">
+    <form method="post" class="form form-horizontal" id="form-admin-role-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>服务标识：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="区分服务的唯一字段,最好使用英文填写" id="servicekey"
+                       name="servicekey">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><!--<span class="c-red">*</span>-->服务描述：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="servicename" name="servicename">
+            </div>
+        </div>
+        <!--        <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-3">默认测试类：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text" value="" placeholder="按类名规范填写,自动生成测试类时会用到此信息" id="classname" name="classname">
+                    </div>
+                </div>-->
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><!--<span class="c-red">*</span>-->协议类型：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box">
+                    <select class="select" size="1" name="httptype" id="httptype">
+                    </select>
+				</span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">服务开发负责人：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box">
+                    <select class="select" size="1" name="editor" id="editor">
+                        <option>--请选择负责人--</option>
+                    </select>
+				</span>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button type="button" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"
+                        onclick="addTservice()"><i class="icon-ok"></i> 提交
+                </button>
+            </div>
+        </div>
+    </form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/select2/select2.full.js"></script>
+<script type="text/javascript" src="lib/select2/pinyin.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+
+    //loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex: -1,
+            beforeSend: function () { //插件加载前
+                this.layerIndex = layer.load(1, {shade: [1.01, '#fff']});
+                $('#admin-role-save').val("正在提交请稍等...")
+            },
+            complete: function () { //完成加载后执行
+                layer.close(this.layerIndex); //完成加载后关闭loading
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+    });
+
+    //协议类型获取
+    $(document).ready(function () {
+        $.ajax({
+            type: "get",
+            url: "/enum/httpTypeEnum",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var html = "<option value=\"\" selected>--请选择协议--</option>";
+                for (i = 0; i < data.length; i++) {
+                    var row = data[i];
+                    var rowHtml = "<option value=\"" + row.id + "\">" + row.value + "</option>";
+                    html = html + rowHtml;
+
+                }
+                $("#httptype").append(html);
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                // report error
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                });
+            }
+        });
+
+        var authorHtml = "";
+        var authorList = devGroup();
+        for (var k = 0; k < authorList.length; k++) {
+            var row = authorList[k];
+            var rowHtml = "<option value=\"" + row.realname + "\">" + row.realname + "</option>";
+            authorHtml = authorHtml + rowHtml;
+        }
+        $("#editor").append(authorHtml);
+        $("#editor").select2();
+
+    });
+
+    function devGroup() {
+        var dev = null;
+        $.ajaxSetup({async: false});
+        $.ajax({
+            type: "post",
+            url: "/user/selectDever",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var msg = data.msg;
+                if (status == 0) {
+                    dev = data.data;
+                } else {
+                    layer.alert(msg, {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                })
+            }
+        });
+        return dev;
+    }
+
+    //添加服务
+    function addTservice() {
+        var servicekey = $("#servicekey").val();
+        var servicename = $("#servicename").val();
+        var httptype = $("#httptype").val();
+        var author = $("#editor").val();
+        /*        var classname=$("#classname").val();*/
+        if (author == "--请选择负责人--") {
+            author = null;
+        }
+
+        if (servicekey == null || servicekey == "") {
+            layer.alert("服务标识不能为空！");
+            return;
+        }
+        /**
+         *modify by luqiwei 2018/6/15:servicename和httytype非必填,这里去掉校验逻辑
+         else if(servicename == null || servicename == ""){
+            layer.msg("服务描述不能为空！");
+            return;
+        }else if(httptype == null || httptype == ""){
+            layer.msg("请选择协议类型！");
+            return;
+        }*/ else {
+            $.ajax({
+                type: "post",
+                url: "/tservice/insertOne",
+                data: {
+                    servicekey: servicekey,
+                    servicename: servicename,
+                    httptype: httptype,
+                    editor: author,
+                    /*                    classname:classname*/
+                    /*isdel:0 不必传状态,数据库默认0*/
+                },
+                dataType: "json",
+                success: function (data) {
+                    var status = data.status;
+                    var msg = data.msg;
+                    if (status == 0) {
+                        window.parent.pageSkip(1);
+                        ;
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    } else {
+                        layer.alert(msg, {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        });
+                    }
+
+                },
+                fail: function (data) {
+                    layer.alert(JSON.stringify(data), {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                },
+                error: function (xhr) {
+                    // report error
+                    layer.alert('Error' + JSON.stringify(xhr), {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+            });
+        }
+
+    }
+</script>
+
+</body>
+</html>

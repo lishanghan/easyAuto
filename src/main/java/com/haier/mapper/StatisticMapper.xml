@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.StatisticMapper">
+    <resultMap id="BaseResultMap" type="java.util.Map">
+        <result column="serviceid" jdbcType="INTEGER" property="serviceid" javaType="Integer"/>
+        <result column="count" jdbcType="INTEGER" property="count" javaType="Integer"/>
+    </resultMap>
+    <!--    <select id="statisticTiByServiceId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+            SELECT COUNT(i.id)
+            FROM ti i
+            WHERE i.serviceId = #{serviceId} AND i.iStatus > 0
+        </select>
+        <select id="statisticTcaseByServiceId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+            SELECT COUNT(c.id)
+            FROM tcase c
+            WHERE c.serviceId = #{serviceId} AND c.status > 0;
+        </select>
+        <select id="statisticTcaseDistinctIidByServiceId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+            SELECT COUNT(DISTINCT (c.iId))
+            FROM tcase c
+            WHERE c.serviceId = #{serviceId} AND c.status > 0;
+        </select>-->
+
+    <select id="statisticCountTi" resultMap="BaseResultMap">
+        SELECT
+            i.serviceId serviceid,
+            count(i.id) `count`
+        FROM ti i
+        WHERE i.iStatus > 0
+        GROUP BY i.serviceId;
+    </select>
+    <select id="statisticCountTcase" resultMap="BaseResultMap">
+        SELECT
+            c.`serviceId` serviceid,
+            COUNT(c.id)   `count`
+        FROM tcase c
+        WHERE c.`status` > 0
+        GROUP BY c.`serviceId`;
+
+    </select>
+    <select id="statisticCountTcaseDistinctIid" resultMap="BaseResultMap">
+        SELECT
+            c.`serviceId`         serviceid,
+            COUNT(DISTINCT (iid)) `count`
+        FROM tcase c
+        WHERE c.`status` > 0
+        GROUP BY c.`serviceId`;
+
+    </select>
+    <select id="statisticCountCustomdetailDistinctClientID" resultMap="BaseResultMap">
+        SELECT
+            d.`parentClientId`             `serviceid`,
+            COUNT(DISTINCT (d.`clientId`)) `count`
+        FROM tcustomdetail d
+        WHERE d.`clientLevel` = 2 AND d.`status` > 0
+        GROUP BY d.`parentClientId`
+    </select>
+</mapper>

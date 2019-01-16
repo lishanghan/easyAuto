@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.TservicedetailMapper">
+  <resultMap id="BaseResultMap" type="com.haier.po.Tservicedetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="serviceId" jdbcType="INTEGER" property="serviceid" />
+    <result column="envId" jdbcType="INTEGER" property="envid" />
+    <result column="hostInfo" jdbcType="VARCHAR" property="hostinfo" />
+    <result column="dbInfo" jdbcType="VARCHAR" property="dbinfo" />
+    <result column="swaggerUrl" jdbcType="VARCHAR" property="swaggerurl" />
+    <result column="clazz" jdbcType="VARCHAR" property="clazz" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, serviceId, envId, hostInfo, dbInfo, swaggerUrl, clazz, status
+  </sql>
+  <select id="selectByExample" parameterType="com.haier.po.TservicedetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tservicedetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tservicedetail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tservicedetail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.haier.po.TservicedetailExample">
+    delete from tservicedetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.haier.po.Tservicedetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tservicedetail (serviceId, envId, hostInfo, 
+      dbInfo, swaggerUrl, clazz, 
+      status)
+    values (#{serviceid,jdbcType=INTEGER}, #{envid,jdbcType=INTEGER}, #{hostinfo,jdbcType=VARCHAR}, 
+      #{dbinfo,jdbcType=VARCHAR}, #{swaggerurl,jdbcType=VARCHAR}, #{clazz,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.haier.po.Tservicedetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tservicedetail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceid != null">
+        serviceId,
+      </if>
+      <if test="envid != null">
+        envId,
+      </if>
+      <if test="hostinfo != null">
+        hostInfo,
+      </if>
+      <if test="dbinfo != null">
+        dbInfo,
+      </if>
+      <if test="swaggerurl != null">
+        swaggerUrl,
+      </if>
+      <if test="clazz != null">
+        clazz,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceid != null">
+        #{serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="envid != null">
+        #{envid,jdbcType=INTEGER},
+      </if>
+      <if test="hostinfo != null">
+        #{hostinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="dbinfo != null">
+        #{dbinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="swaggerurl != null">
+        #{swaggerurl,jdbcType=VARCHAR},
+      </if>
+      <if test="clazz != null">
+        #{clazz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.haier.po.TservicedetailExample" resultType="java.lang.Long">
+    select count(*) from tservicedetail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tservicedetail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.serviceid != null">
+        serviceId = #{record.serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="record.envid != null">
+        envId = #{record.envid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hostinfo != null">
+        hostInfo = #{record.hostinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dbinfo != null">
+        dbInfo = #{record.dbinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.swaggerurl != null">
+        swaggerUrl = #{record.swaggerurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clazz != null">
+        clazz = #{record.clazz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tservicedetail
+    set id = #{record.id,jdbcType=INTEGER},
+      serviceId = #{record.serviceid,jdbcType=INTEGER},
+      envId = #{record.envid,jdbcType=INTEGER},
+      hostInfo = #{record.hostinfo,jdbcType=VARCHAR},
+      dbInfo = #{record.dbinfo,jdbcType=VARCHAR},
+      swaggerUrl = #{record.swaggerurl,jdbcType=VARCHAR},
+      clazz = #{record.clazz,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.haier.po.Tservicedetail">
+    update tservicedetail
+    <set>
+      <if test="serviceid != null">
+        serviceId = #{serviceid,jdbcType=INTEGER},
+      </if>
+      <if test="envid != null">
+        envId = #{envid,jdbcType=INTEGER},
+      </if>
+      <if test="hostinfo != null">
+        hostInfo = #{hostinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="dbinfo != null">
+        dbInfo = #{dbinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="swaggerurl != null">
+        swaggerUrl = #{swaggerurl,jdbcType=VARCHAR},
+      </if>
+      <if test="clazz != null">
+        clazz = #{clazz,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.haier.po.Tservicedetail">
+    update tservicedetail
+    set serviceId = #{serviceid,jdbcType=INTEGER},
+      envId = #{envid,jdbcType=INTEGER},
+      hostInfo = #{hostinfo,jdbcType=VARCHAR},
+      dbInfo = #{dbinfo,jdbcType=VARCHAR},
+      swaggerUrl = #{swaggerurl,jdbcType=VARCHAR},
+      clazz = #{clazz,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

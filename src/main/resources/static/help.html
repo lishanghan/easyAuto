@@ -1,0 +1,387 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>帮助</title>
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        table i {
+            padding-left: 30px;
+        }
+
+        table span {
+            color: #f72e2b;
+            font-weight: bold;
+        }
+
+        table img {
+            padding: 2px;
+            margin: 1px;
+            background-color: #0a6999;
+        }
+
+        h4 {
+            color: #0e90d2;
+        }
+    </style>
+</head>
+<body>
+<h2>帮助一览列表</h2>
+<div id="table-of-contents">
+    <a href="#AssertType">1 - AssertType</a>
+    <br>
+    <a href="#ReplaceRegex">2 - ReplaceRegex</a>
+    <br>
+    <a href="#cronExp">3 - CronExpression</a>
+</div>
+<h3><a name="AssertType">1 - AssertType</a></h3>
+断言方式枚举:
+<p>
+<table class="table table-border table-bordered table-bg table-hover table-sort">
+    <thead>
+    <tr class="text-1">
+        <th width="10%">断言类型</th>
+        <th width="30%">断言说明</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="text-l">
+        <td>equal</td>
+        <td>实际值与期望值完全相等</td>
+    </tr>
+    <tr class="text-l">
+        <td>contain</td>
+        <td>实际值包含期望值(忽略大小写)</td>
+    </tr>
+    <tr class="text-l">
+        <td>key-value</td>
+        <td>实际值与相对应key的期望中的值相等,或忽略大小写比较相等,
+            <br>或忽略空字符比较相等,或包含期望值,或匹配期望值的正则形式,
+            <br>所有的key-value对比较都为true,断言通过
+        </td>
+    </tr>
+    <tr class="text-l">
+        <td>match</td>
+        <td>实际值中匹配到期望值的正则表达式</td>
+    </tr>
+    <tr class="text-l">
+        <td>exclude</td>
+        <td>实际值中不期望匹配到的正则表达式</td>
+    </tr>
+    </tbody>
+</table>
+</p>
+<h3><a name="ReplaceRegex">2 - ReplaceRegex</a></h3>
+<p>用例前置后置处理时能够识别的表达式及识别后的处理规则:</p>
+<table class="table table-border table-bordered table-bg table-hover table-sort">
+    <thead>
+    <tr class="text-1">
+        <th width="10%">正则表达式</th>
+        <th width="30%">功能</th>
+        <th width="30%">举例</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="text-1">
+        <td>(?i)&lt;uuid\(?\d*\)?&gt;</td>
+        <td>&lt;uuid(num)&gt; 随机唯一16进制字符串
+            <br><i>参数:num-非必填,指定要截断的长度</i>
+        </td>
+        <td>
+            &lt;uuid()&gt;:随机生成32位唯一字符串(16进制) 结果:599b255f7aaa41768108e77540d1249a
+            <br>&lt;uuid(5)&gt;:将生成的唯一字符串截取前5位 结果:599b2,<span>(注意:截取后的字符串不再保证唯一性)</span>
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;id&gt;</td>
+        <td>&lt;id&gt; 随机一个身份证号(18-120岁)
+        </td>
+        <td>
+            &lt;id&gt; 结果:130300195509176235
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;name&gt;</td>
+        <td>&lt;name&gt; 随机一个姓名,姓氏随机一个百家姓,名字随机1-2个常用名,最长可能出现4个字的名字,如"司马东晟"
+        </td>
+        <td>
+            &lt;name&gt; 结果:司寇焕旻
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;longDate()&gt;</td>
+        <td>返回以1970-1-1 00:00:00 GMT 计算出的毫秒数</td>
+        <td> &lt;longDate()&gt;:1536715432573</td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;date\(-?\d*\)&gt;</td>
+        <td> &lt;date(num)&gt; 生成一个日期(默认今天),<span>格式"yyyy-MM-dd"</span>
+            <br><i>参数:num-非必填,指定日期<span>按天的偏移量</span></i>
+        </td>
+        <td>假设现在是2018-08-08
+            <br>&lt;date()&gt;: 生成今天的日期,结果:2018-08-08
+            <br>&lt;date(-1)&gt;:生成昨天的日期,结果:2018-08-07
+            <br>&lt;date(10)&gt;:生成10天后的日期,结果:2018-08-18
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;datetime\(-?\d*\)&gt;</td>
+        <td> &lt;datetime(num)&gt;生成一个datetime,<span>格式"yyyy-MM-dd HH:mm:ss"</span>
+            <br><i>参数:num-非必填,指定datetime<span>按小时的偏移量</span></i>
+        </td>
+        <td>同上
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;time\(-?\d*\)</td>
+        <td> &lt;time(num)&gt;生成一个时间,<span>格式"HH:mm:ss"</span>
+            <br><i>参数:num-非必填,指定时间<span>按分钟的偏移量</span></i>
+        </td>
+        <td>同上
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;randomI\(\d*,?\d*\)&gt;</td>
+        <td> &lt;randomI(min,max)&gt;在区间[min,max)中随机生成一个整数,<span>注意max必须大于min</span>
+
+            <br><i>参数:min-非必填,指定随机范围的下限(包含)</i>
+            <br><i>参数:max-非必填,指定随机范围的上限(不包含)</i>
+
+        </td>
+        <td>&lt;randomI()&gt;:不填写任何参数,将随机一个[0,100)中的整数
+            <br>&lt;randomI(100,999)&gt;:随机一个整数,范围[100,999)
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;randomF\((\d+\.\d+)?,?(\d+\.\d+)?\)&gt;</td>
+        <td> &lt;randomF(min,max)&gt;在区间[min,max)中随机生成一个浮点数,<span>生成浮点数的精度将与min参数的精度保持一致</span>
+
+            <br><i>参数:min-非必填,指定随机范围的下限(包含),随机数的精度与此参数的精度保持一致</i>
+            <br><i>参数:max-非必填,指定随机范围的上限(不包含)</i>
+
+        </td>
+        <td>&lt;randomF()&gt;:不填写任何参数,将从[0.01,1.00)中随机一个浮点数,结果:0.23
+            <br>&lt;randomF(2.00,5.00)&gt;:将从[2.00,5.00)区间中随机一个浮点数,浮点数的精度与min参数保持一致,此例中将保留两位小数,结果:3.16
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;pureSql\(.+\)&gt;</td>
+        <td> &lt;pureSql(pureDmlSql)&gt;执行pureDmlSql并且使用执行结果替换此匹配项
+            <br><i>参数:pureDmlSql-必填,pureDmlSql为<span>可直接在数据库中执行</span>的sql,不可再包含其它替换规则,否则可能会执行失败</i>
+        </td>
+        <td>&lt;pureSql(select id from table)&gt;:执行查询语句,并使用查询结果替换此处,结果:1
+            <br>&lt;pureSql(update table t set t.status=-1 where t.id=1)&gt;执行更新语句,并使用更新返回结果替换此处,结果:1
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;sql([^<>]*)&gt;</td>
+        <td> &lt;sql(dmlSql)&gt;执行sql语句,<span>无论何时,必须确保执行结果返回有且仅有一行(rows=1)</span><br/>
+            当返回结果仅一列时(columns=1时),直接使用此列值替换&lt;sql(dmlSql)&gt;表达式,当返回结果为多列时(columns>1),将使用各列的值替换当前列的引用项
+            <br><i>参数:dmlSql-必填,dmlSql中不可包含&lt;或&gt;</i>
+        </td>
+        <td>例1:&lt;sql(SELECT o.`request_no` FROM trade_pay_to_account_order o ORDER BY o.`created_time`DESC limit 1)&gt;<br/>
+            sql执行如图<img src="img/sql_select_result_oneColumn.png">,此时查询结果仅返回一列,系统将使用值"2436988321625276626"替换当前匹配到的sql表达式<br/>
+            <br/>
+            例2:&lt;sql(SELECT * FROM trade_pay_to_account_order o LIMIT 1)&gt;<br/>
+            sql执行如图<img src="img/sql_select_result_moreColumn.png"><br/>
+            此时系统将使用各个列的值替换整个文本域的$(key),比如参数中如果填写了$(request_no),$(pay_channel),则会分别替换为201805291509,KJTPAY
+            <br/>
+            <br/>
+            例3:&lt;sql(update table t set t.status=-1 where t.id=1)&gt;执行更新语句,并使用更新返回结果替换此处,结果:1
+
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;var\([^<>]+\)&gt;</td>
+        <td> &lt;var(fieldName)&gt;使用测试类中的字段值替换此匹配项
+            <br><i>参数:fieldName-必填,fieldName必须是测试类中维护的字段名</i>
+        </td>
+        <td>&lt;var(requestNo)&gt;将从当前测试类中,获取可访问的字段名为requestNo的字段的值,替换当前匹配项
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>&lt;\$\d+\([^<>]*\)&gt;</td>
+        <td> &lt;$index(xxx)&gt;将请求参数中此匹配项括号中的内容赋值给&lt;ref(index)
+            <br><i>参数:index-必填,index必须是整数,标记引用源</i>
+        </td>
+        <td>&lt;$1(abc)&gt;将abc赋值到所有 &lt;ref(1)&gt;的位置,并且<$1(abc)>自动替换为abc
+        </td>
+    </tr>
+    <tr class="text-1">
+        <td>(?i)&lt;ref\(\d+\)&gt;</td>
+        <td> &lt;ref(index)&gt;与<$index(xxx)>配合使用,引用xxx内容</td>
+        <td></td>
+    </tr>
+    <tr class="text-l">
+        <td>(?i)&lt;put\(\w+,[^<>]*\)&gt;</td>
+        <td>
+            &lt;put(key,value)&gt; 将key,value存储到临时变量中,并且此表达式使用value替换,使用&lt;get(key)&gt;可取得此值<br/>
+            <i>参数:key-必填,只能由单词字符组成[a-zA-Z_0-9],待存储的临时值的名称</i><br/>
+            <i>参数:value-必填,待存储的值</i><br/>
+            注意:
+            value有两种特殊写法,表明从当前测试结果(JSONObject)中取值,分别是:<br/>
+            \$\w+&emsp;:&emsp; 例:$responseCode,从当前测试用例的测试返回结果中,找到第一个非null的responseCode的值<br/>
+            \$\(\{\w+|\[\d+)+&emsp;:&emsp; 例:${resultList[1{name,从当前测试用例的测试返回结果中,按此路径查找name的值<br/>
+        </td>
+        <td>
+            &lt;put(title,我是一个标题)&gt; : 将(title=我是一个标题)存入临时表中<br/>
+            &lt;put(title,$title)&gt; : 首先根据$title去返回结果中找值(找到第一个title不为null的值),然后存入临时表中<br/>
+            &lt;put(title,${resultList[0{id)&gt;:首先根据${resultList[0{id)去返回结果中找值,然后存入临时表中
+        </td>
+    </tr>
+    <tr class="text-l">
+        <td>(?i)&lt;putR\(\w+,[^<>]*\)&gt;</td>
+        <td>&lt;putR(key,value)&gt; put & remove,将(key,value)存储到临时变量中,并且此表达式的占位将被移除,使用&lt;get(key)&gt;可取得此值<br/></td>
+        <td>
+            &lt;putR(title,我是一个标题)&gt; : 将(title=我是一个标题)存入临时表中,并且源字符串中此表达式将移除<br/>
+        </td>
+    </tr>
+    <tr class="text-l">
+        <td>(?i)&lt;get\(\w+\)&gt;</td>
+        <td>&lt;get(key)&gt; 从临时表中取出名称为key的值,与put配合使用</td>
+        <td>&lt;get(title)&gt; 从临时表中取出名称为`title`对应的值,如果有多个`title`,则取最近一次的值</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3><a name="cronExp">3 - CronExpression</a></h3>
+<div>
+    <h4>3.1 Cron表达式格式</h4>
+    <p>
+    <pre>
+        *       *       *       *       *       *       *
+        {秒}   {分}    {时}    {日}     {月}   {星期}  {年份(可为空)}
+
+        例:  0 0 13 ? * WED 在每星期三13:00 执行（年份通常 省略）
+    </pre>
+    </p>
+    <h4>3.2 每个字段的允许值</h4>
+    <p>
+    <pre>
+        字段      允许值             允许的特殊字符
+        秒        0-59               , - * /
+        分        0-59               , - * /
+        时        0-23               , - * /
+        日        1-31               , - * ? / L W C
+        月        1-12 或者 JAN-DEC   , - * /
+        星期      1-7 或者 SUN-SAT    , - * ? / L C #
+        年（可选） 留空, 1970-2099     , - * /
+    </pre>
+    </p>
+    <h4>3.3 允许值的意义</h4>
+    <p>
+    <pre>
+        Seconds (秒)      ：可以用数字0-59 表示，
+        Minutes(分)       ：可以用数字0-59 表示，
+        Hours(时)         ：可以用数字0-23表示,
+        Day-of-Month(天)  ：可以用数字1-31 中的任一一个值，但要注意一些特别的月份
+        Month(月)         ：可以用0-11 或用字符串  “JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV and DEC” 表示
+        Day-of-Week(每周) ：可以用数字1-7表示（1 ＝ 星期日）或用字符口串“SUN, MON, TUE, WED, THU, FRI and SAT”表示
+    </pre>
+    </p>
+    <h4>3.4 每个符号的意义</h4>
+    <p>
+    <pre>
+        *   表示所有值；
+        ?   表示未说明的值，即不关心它为何值；
+        -   表示一个指定的范围；
+        ,   表示附加一个可能值；
+        /   符号前表示开始时间，符号后表示每次递增的值；
+        L   ("last") ("last") "L" 用在day-of-month字段意思是 "这个月最后一天"；
+            用在 day-of-week字段, 它简单意思是 "7" or "SAT"。
+            如果在day-of-week字段里和数字联合使用，它的意思就是 "这个月的最后一个星期几"
+                例如： "6L" means "这个月的最后一个星期五".
+            当我们用“L”时，不指明一个列表值或者范围是很重要的，不然的话，我们会得到一些意想不到的结果。
+        W   ("weekday") 只能用在day-of-month字段。
+            用来描叙最接近指定天的工作日（周一到周五）。
+                例如：在day-of-month字段用“15W”指“最接近这个 月第15天的工作日”，即如果这个月第15天是周六，那么触发器将会在这个月第14天即周五触发；
+            如果这个月第15天是周日，那么触发器将会在这个月第 16天即周一触发；
+            如果这个月第15天是周二，那么就在触发器这天触发。注意一点：这个用法只会在当前月计算值，不会越过当前月。
+            “W”字符仅能在day-of-month指明一天，不能是一个范围或列表。也可以用“LW”来指定这个月的最后一个工作日。
+        #   只能用在day-of-week字段。用来指定这个月的第几个周几。
+                例如：在day-of-week字段用"6#3"指这个月第3个周五（6指周五，3指第3个）。
+            如果指定的日期不存在，触发器就不会触发。
+        C   指和calendar联系后计算过的值。
+                例：在day-of-month 字段用“5C”指在这个月第5天或之后包括calendar的第一天；
+            在day-of-week字段用“1C”指在这周日或之后包括calendar的第一天
+</pre>
+    </p>
+    <h4>3.5 Cron表达式示例</h4>
+    <p>
+    <pre>
+        */5 * * * * ?               每隔5秒执行一次
+        0 */1 * * * ?               每隔1分钟执行一次
+        0 0 5-15 * * ?              每天5-15点整点触发
+        0 0/3 * * * ?               每三分钟触发一次
+        0 0-5 14 * * ?              在每天下午2点到下午2:05期间的每1分钟触发
+        0 0/5 14 * * ?              在每天下午2点到下午2:55期间的每5分钟触发
+        0 0/5 14,18 * * ?           在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发
+        0 0/30 9-17 * * ?           朝九晚五工作时间内每半小时
+        0 0 10,14,16 * * ?          每天上午10点，下午2点，4点
+        0 0 12 ? * WED              表示每个星期三中午12点
+        0 0 17 ? * TUES,THUR,SAT    每周二、四、六下午五点
+        0 10,44 14 ? 3 WED          每年三月的星期三的下午2:10和2:44触发
+        0 15 10 ? * MON-FRI         周一至周五的上午10:15触发
+        0 0 23 L * ?                每月最后一天23点执行一次
+        0 15 10 L * ?               每月最后一日的上午10:15触发
+        0 15 10 ? * 6L              每月的最后一个星期五上午10:15触发
+        0 15 10 * * ? 2005          2005年的每天上午10:15触发
+        0 15 10 ? * 6L 2002-2005    2002年至2005年的每月的最后一个星期五上午10:15触发
+        0 15 10 ? * 6#3             每月的第三个星期五上午10:15触发
+
+        30 * * * * ?                每半分钟触发任务
+        30 10 * * * ?               每小时的10分30秒触发任务
+        30 10 1 * * ?               每天1点10分30秒触发任务
+        30 10 1 20 * ?              每月20号1点10分30秒触发任务
+        30 10 1 20 10 ? *           每年10月20号1点10分30秒触发任务
+        30 10 1 20 10 ? 2011        2011年10月20号1点10分30秒触发任务
+        30 10 1 ? 10 * 2011         2011年10月每天1点10分30秒触发任务
+        30 10 1 ? 10 SUN 2011       2011年10月每周日1点10分30秒触发任务
+        15,30,45 * * * * ?          每15秒，30秒，45秒时触发任务
+        15-45 * * * * ?             15到45秒内，每秒都触发任务
+        15/5 * * * * ?              每分钟的每15秒开始触发，每隔5秒触发一次
+        15-30/5 * * * * ?           每分钟的15秒到30秒之间开始触发，每隔5秒触发一次
+        0 0/3 * * * ?               每小时的第0分0秒开始，每三分钟触发一次
+        0 15 10 ? * MON-FRI         星期一到星期五的10点15分0秒触发任务
+        0 15 10 L * ?               每个月最后一天的10点15分0秒触发任务
+        0 15 10 LW * ?              每个月最后一个工作日的10点15分0秒触发任务
+        0 15 10 ? * 5L              每个月最后一个星期四的10点15分0秒触发任务
+        0 15 10 ? * 5#3             每个月第三周的星期四的10点15分0秒触发任务
+</pre>
+    </p>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/hcharts/Highcharts/5.0.6/js/highcharts.js"></script>
+<script type="text/javascript" src="lib/hcharts/Highcharts/5.0.6/js/modules/exporting.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haier.mapper.TservicedetailCustomMapper">
+    <resultMap id="TservicedetailCustomResultMap" type="com.haier.po.TservicedetailCustom">
+        <id column="id" property="id"/>
+        <result column="serviceid" property="serviceid"/>
+        <result column="servicekey" property="servicekey"/>
+        <result column="servicename" property="servicename"/>
+        <result column="editor" property="seditor"/>
+        <result column="envid" property="envid"/>
+        <result column="envkey" property="envkey"/>
+        <result column="remark" property="envremark"/>
+        <result column="hostinfo" property="hostinfo"/>
+        <result column="dbinfo" property="dbinfo"/>
+        <result column="swaggerurl" property="swaggerurl"/>
+        <result column="clazz" property="clazz"/>
+        <result column="status" property="status"/>
+    </resultMap>
+    <select id="selectByCondition" parameterType="com.haier.po.TservicedetailCustom"
+            resultMap="TservicedetailCustomResultMap">
+        SELECT
+        tservicedetail.`id`,
+        tservicedetail.`serviceId`,
+        tservice.`serviceKey`,
+        tservice.`serviceName`,
+        tservice.`editor`,
+        tservicedetail.`envId`,
+        tenv.`envKey`,
+        tenv.`remark`,
+        tservicedetail.`hostInfo`,
+        tservicedetail.`dbInfo`,
+        tservicedetail.`swaggerUrl`,
+        tservicedetail.`clazz`,
+        tservicedetail.`status`
+        FROM tservicedetail
+        INNER JOIN tservice ON tservicedetail.`serviceId` = tservice.`id` AND tservice.`isDel` = 0
+        INNER JOIN tenv ON tservicedetail.`envId` = tenv.`id`
+        WHERE tservicedetail.status>0
+        <if test="_parameter!=null">
+            <if test="id!=null">
+                AND tservicedetail.id=#{id}
+            </if>
+            <if test="serviceid!=null">
+                AND tservicedetail.serviceId=#{serviceid}
+            </if>
+            <if test="envid!=null">
+                AND tservicedetail.envId=#{envid}
+            </if>
+            <if test="servicekey!=null and servicekey!=''">
+                AND tservice.serviceKey =#{servicekey}
+            </if>
+            <if test="seditor!=null and seditor!=''">
+                AND tservice.editor =#{seditor}
+            </if>
+            <if test="envkey!=null and envkey!=''">
+                AND tenv.envKey =#{envkey}
+            </if>
+            <if test="hostinfo!=null and hostinfo!=''">
+                AND tservicedetail.hostInfo like CONCAT('%',#{hostinfo},'%')
+            </if>
+            <if test="dbinfo!=null and dbinfo!=''">
+                AND tservicedetail.dbInfo like CONCAT('%',#{dbinfo},'%')
+            </if>
+            <if test="swaggerurl!=null and swaggerurl!=''">
+                AND tservicedetail.swaggerUrl like CONCAT('%',#{swaggerurl},'%')
+            </if>
+        </if>
+    </select>
+</mapper>

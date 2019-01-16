@@ -1,0 +1,313 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>柱状图统计</title>
+    <style>
+        .page-container>div {
+            min-width: 700px;
+            height: 400px;
+            margin-top: 3%
+        }
+    </style>
+</head>
+<body>
+<nav class="breadcrumb"> 报表统计<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div id="container1"></div>
+</div>
+<div class="page-container">
+    <div id="container2"></div>
+</div>
+<!--<div class="page-container">
+    <div id="container3"></div>
+</div>-->
+<div class="page-container">
+    <div id="container4"></div>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/hcharts/Highcharts/5.0.6/js/highcharts.js"></script>
+<script type="text/javascript" src="lib/hcharts/Highcharts/5.0.6/js/modules/exporting.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: "get",
+            url: "/statistic/realtime",
+            dataType: "json",
+            success: function (data) {
+                var status = data.status;
+                var arrayList = data.data;
+                console.log("data:" + arrayList);
+                itotalArr = [];
+                ctotalArr = [];
+                itotalByCaseArr = [];
+                itotalNoCaseArr = [];
+                irateArr = [];
+                cfinenessArr = [];
+                if (status == 0) {
+                    for (var i in arrayList) {
+                        //save categories
+                        options1.xAxis.categories.push(arrayList[i].serviceKey);
+                        options2.xAxis.categories.push(arrayList[i].serviceKey);
+                        options3.xAxis.categories.push(arrayList[i].serviceKey);
+                        //build series
+                        itotalArr.push(parseInt(arrayList[i].itotal));
+                        ctotalArr.push(parseInt(arrayList[i].ctotal));
+                        itotalByCaseArr.push(parseInt(arrayList[i].itotalByCase));
+                        itotalNoCaseArr.push(parseInt(arrayList[i].itotalNoCase));
+                        irateArr.push(parseFloat(arrayList[i].irate));
+                        cfinenessArr.push(parseFloat(arrayList[i].cfineness));
+                    }
+                    //save series
+                    options1.series[0].data = itotalArr;
+                    options1.series[1].data = ctotalArr;
+                    options1.series[2].data = itotalByCaseArr;
+                    options1.series[3].data = itotalNoCaseArr;
+
+                    options2.series[0].data = irateArr;
+                    options3.series[0].data = cfinenessArr;
+                    $('#container1').highcharts(options1);
+                    $('#container2').highcharts(options2);
+                   //用例粒度报表暂时不用
+                    /* $('#container3').highcharts(options3);*/
+
+                } else {
+                    layer.alert(JSON.stringify(data.msg), {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                }
+            },
+            fail: function (data) {
+                layer.alert(JSON.stringify(data), {
+                    icon: 0,
+                    skin: 'layer-ext-moon'
+                });
+            },
+            error: function (xhr) {
+                layer.alert('Error' + JSON.stringify(xhr), {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                })
+            }
+        });
+
+        var options1 = {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '接口-用例统计'
+            },
+            xAxis: {
+                categories: []
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '个数'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y} 个</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '接口数'
+            }, {
+                name: '用例数'
+            }, {
+                name: '用例覆盖接口'
+            }, {
+                name: '未设计用例接口'
+            }]
+        }
+        var options2 = {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '接口-用例覆盖率'
+            },
+            xAxis: {
+                categories: []
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '百分比'
+                },
+                labels: {
+                    format: '{value} %'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.2f}%</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '用例覆盖率'
+            }
+            ]
+        }
+        var options3 = {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '接口-用例粒度'
+            },
+            xAxis: {
+                categories: []
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '个数'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.2f} 个</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '用例粒度'
+            }]
+        }
+        var options4 = {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '自动化率(接口定制数/总接口数)'
+            },
+            xAxis: {
+                categories: []
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '百分比'
+                },
+                labels: {
+                    format: '{value} %'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.2f}%</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '自动化率'
+            }
+            ]
+        }
+
+        $.ajax({
+                type: "get",
+                url: "/statistic/autoRate",
+                dataType: "json",
+                success: function (data) {
+                    var status = data.status;
+                    if (status == 0) {
+                        var list = data.data;
+                        var autoRate = [];
+                        for (var i in list) {
+                            options4.xAxis.categories.push(list[i].serviceKey);
+                            autoRate.push(parseFloat(list[i].rate) * 100)
+                        }
+                        options4.series[0].data = autoRate;
+                        $('#container4').highcharts(options4);
+                    } else {
+                        layer.alert(JSON.stringify(data.msg), {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        });
+                    }
+                },
+                fail: function (data) {
+                    layer.alert(JSON.stringify(data), {
+                        icon: 0,
+                        skin: 'layer-ext-moon'
+                    });
+                },
+                error: function (xhr) {
+                    layer.alert('Error' + JSON.stringify(xhr), {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            }
+        );
+
+    });
+</script>
+</body>
+</html>

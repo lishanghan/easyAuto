@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="lib/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>测试列列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 服务管理 <span
+        class="c-gray en">&gt;</span>测试类列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                             href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div>
+        <div style="margin-left:30px;margin-top:20px;">
+            <label style="margin-left:38px;">测试类名：</label><input type="text" name="tClassName" id="tClassName" placeholder=" " style="width:12%" class="input-text">
+            <label style="margin-left:70px;">服务：</label>
+            <span class="select-box" style="width:12%">
+                <select class="select" size="1" name="serviceKey" id="serviceKey">
+                    <option value="">请选择</option>
+                </select>
+            </span>
+            <button name="find" id="find" style="margin-left:50px;width:80px" class="btn btn-success" type="button" onclick="pageSkip(1)"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+        </div>
+        <div style="margin-left:30px;margin-top:20px;">
+            <label style="margin-left:70px;">描述：</label><input type="text" name="remark" id="remark" placeholder=" " style="width:12%" class="input-text">
+            <label style="margin-left:54px;">创建人：</label>
+            <span class="select-box" style="width:12%">
+                <select class="select" size="1" name="status" name="creater" id="creater">
+                    <option value="" selected>请选择</option>
+                </select>
+            </span>
+            <button name="empty" id="empty" style="margin-left:50px;width:80px" class="btn btn-success" type="button" onclick="empty()"><i class="Hui-iconfont">&#xe665;</i> 清空</button>
+        </div>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+            <a class="btn btn-primary radius" onclick="tClass_add('添加测试类','tclass-add.html','800','400')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加测试类</a>
+        </span>
+        <span class="r">共有数据：<strong id="total">0</strong> 条</span>
+    </div>
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+        <table class="table table-border table-bordered table-bg table-hover table-sort" id="table">
+            <thead>
+            <tr class="text-c">
+                <th width="5%"><input name="" type="checkbox" value=""></th>
+                <th width="5%">ID</th>
+                <th width="15%">包名</th>
+                <th width="15%">测试类名称</th>
+                <th width="15%">服务</th>
+                <th width="10">创建人</th>
+                <th width="15%">描述</th>
+                <th width="10%">更新时间</th>
+                <th width="10%">操作</th>
+            </tr>
+            </thead>
+            <tbody id="tClassList">
+            </tbody>
+        </table>
+        <!--分页-->
+        <div class="dataTables_info" id="dataTables_info">
+            <span>共有 <strong id="totalPages">0</strong> 页</span>
+            <span>当前第 <strong id="now">0</strong> 页</span>
+        </div>
+        <div class="dataTables_paginate paging_simple_numbers" id="pager">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="static/hry-auto/util.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="lib/select2/select2.full.js"></script>
+<script type="text/javascript" src="lib/select2/pinyin.js"></script>
+<!--&lt;!&ndash;_footer 作为公共模版分离出去&ndash;&gt;
+<script type="text/javascript" src="static/hry-auto/util.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+&lt;!&ndash;/_footer 作为公共模版分离出去&ndash;&gt;
+
+&lt;!&ndash;请在下方写此页面业务相关的脚本&ndash;&gt;
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="lib/select2/select2.full.js"></script>
+<script type="text/javascript" src="lib/select2/pinyin.js"></script>-->
+<script type="text/javascript">
+    var layerIndex;
+    //loading
+    $(function () {
+        $.ajaxSetup({
+            layerIndex:-1,
+            beforeSend: function () { //插件加载前
+                layerIndex = layer.load(1, { shade: [0.01, '#fff'] });
+            },
+            error: function () { //报错时执行
+                layer.alert('显示异常，请刷新后重试', {
+                    skin: 'layui-layer-molv'
+                    , closeBtn: 0
+                    , shift: 4 //动画类型
+                });
+            }
+        });
+    });
+
+    function empty() {
+        $("#tClassName").val("");
+        $("#serviceKey option:first").prop("selected", 'selected');
+        $("#remark").val("");
+        $("#creater").val(null).trigger("change");
+        $("#creater").val("请选择").trigger("change");
+
+    }
+
+    //初始加载
+    $(document).ready(function () {
+        var list = getServiceList();
+        var html = "";
+        for (i = 0; i < list.length; i++) {
+            var row = list[i];
+            var rowHtml = "<option value=\""+row.id+"\">"+row.servicekey+"</option>";
+            html = html + rowHtml;
+        }
+        $("#serviceKey").append(html);
+
+        var dev = getUserList();
+        var htmldev = "";
+        for (var i = 0; i < dev.length; i++) {
+            var rowHtml = "";
+            var row = dev[i];
+            rowHtml = "<option value=\"" + row.realname + "\">" + row.realname + "</option>";
+            htmldev = htmldev + rowHtml;
+        }
+        $("#creater").append(htmldev);
+        $("#creater").select2();
+
+        pageSkip(1);
+
+    });
+
+    //分页查询
+    function pageSkip(index) {
+        if (index == 0) {
+            return;
+        }
+        var tClassName = $("#tClassName").val();
+        var serviceKey = $("#serviceKey").val();
+        var remark = $("#remark").val();
+        var creater = $("#creater").val();
+
+        $.ajax({
+            type: "post",
+            url: "/class/selectByCondition",
+            data: {
+                classname: tClassName,
+                skey: serviceKey,
+                remark: remark,
+                author: creater,
+                pageNum: index,
+                pageSize: 10
+            },
+            dataType: "json",
+
+            success: function (data) {
+
+                var status = data.status;
+                var msg = data.msg;
+
+                if (status == 0) {
+                    var list = data.data.list;
+                    console.log(data);
+                    var html = "";
+
+                    $("#tClassList").html("");
+
+                    for (var i = 0; i < list.length; i++) {
+                        var row = list[i];
+                        var rowHtml = "<tr class=\"text-c\">\n" +
+                            "<td><input name=\"\" type=\"checkbox\" value=\"\"></td>\n" +
+                            "<td>" + row.id + "</td>\n" +
+                            "<td>" + row.packagename + "</td>\n" +
+                            "<td>" + row.classname + "</td>\n" +
+                            "<td >" + row.skey + "</td>\n" +
+                            "<td>" + row.author + "</td>\n" +
+                            "<td>" + row.remark + "</td>\n" +
+                            "<td>" + row.updatetime + "</td>\n" +
+                            "<td class=\"f-14\">" +
+                            "<a title=\"编辑\" href=\"javascript:0;\" onclick=\"tClass_edit('测试类编辑','tclass-edit.html',"+row.id+",'800','400')\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> \n" +
+                            "<a title=\"删除\" href=\"javascript:;\" onclick=\"tClass_del(this," + row.id + ")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
+                            "</td>\n" +
+                            "</tr>";
+                        html = html + rowHtml;
+                    }
+
+                    $("#tClassList").append(html);
+                    pagination(data);
+                    layer.close(layerIndex);
+
+                } else {
+                    layer.close(layerIndex);
+                    layer.alert('Error' + msg, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            },
+
+
+        });
+
+
+    }
+
+    /*测试类-添加*/
+    function tClass_add(title,url,w,h){
+        layer_show(title,url,w,h);
+
+    }
+
+    //测试类编辑
+    function tClass_edit(title,url,id,w,h) {
+        url= url + "?id="+id;
+        layer_show(title,url,w,h);
+    }
+
+
+    /*测试类-删除*/
+    function tClass_del(obj, id) {
+        var ms="测试类删除需谨慎，请确认是否删除！";
+        del(obj,id,"/class/deleteOne",ms);
+    }
+
+</script>
+</body>
+</html>
