@@ -6,7 +6,7 @@ zdy:
 server:
   port: 8885
 logging:
-  file: c:/logs/hryAuto/hryAuto.log
+  file: c:/logs/easyAuto/hryAuto.log
   level:
     com.haier.aspect: debug
     com.haier.config: debug
