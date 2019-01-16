@@ -5,7 +5,7 @@
 * 所有操作基于平台完成,无需代码基础
 
 # 框架结构
-[sysplat]:https://github.com/hryOrgan/hryAuto/blob/master/hrySysPlatform.png
+[sysplat]:https://github.com/lishanghan/easyAuto/blob/master/hrySysPlatform.png
 ![sysplat]
 
 
