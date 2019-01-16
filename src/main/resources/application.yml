@@ -12,6 +12,7 @@ unionlogin:
     -
       #测试2
       envId: 2
+      envId: 2
       url: http://10.252.104.1:8211/hry-uni-login/login
       username: supper2
       password: kjt123

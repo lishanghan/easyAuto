@@ -11,7 +11,7 @@ logging:
 #    com.haier.mapper.*: debug
 spring:
   application:
-    name: hryAuto
+    name: easyAuto
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver

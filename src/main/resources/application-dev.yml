@@ -19,7 +19,7 @@ logging:
     #com.haier.mapper.*: debug
 spring:
   application:
-    name: hryAuto
+    name: easyAuto
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://127.0.0.1:3306/hry_auto?serverTimezone=CTT&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
@@ -31,6 +31,7 @@ spring:
       initial-size: 5
       min-idle: 5
       max-active: 20
+
       max-wait: 60000
       max-create-task-count: 20
       time-between-eviction-runs-millis: 60000
