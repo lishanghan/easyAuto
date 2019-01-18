@@ -1,11 +1,8 @@
 package com.haier.testng.test;
 
 import com.haier.anno.SKey;
-import com.haier.po.HryTest;
 import com.haier.testng.base.Base;
-import com.haier.util.HryHttpClientUtil;
 import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
 
 import static com.haier.util.AssertUtil.supperAssert;
 @SKey("Test")

@@ -1,11 +1,3 @@
-import com.haier.Application;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.Test;
-
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-
 /**
  * @Description:
  * @Author: luqiwei

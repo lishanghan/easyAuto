@@ -2,7 +2,6 @@ package com.haier.mapper;
 
 import com.haier.po.Tenv;
 import com.haier.po.TenvExample;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

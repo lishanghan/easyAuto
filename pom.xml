@@ -191,7 +191,7 @@
                              &lt;!&ndash;jar包不包含唯一版本标识&ndash;&gt;
                              <useUniqueVersions>false</useUniqueVersions>
                              &lt;!&ndash;指定入口类&ndash;&gt;
-                             <mainClass>com.haier.Application</mainClass>
+                             <mainClass>com.easyApplication</mainClass>
                          </manifest>
                          <manifestEntries>
                              &lt;!&ndash;MANIFEST.MF 中 Class-Path 加入资源文件目录&ndash;&gt;

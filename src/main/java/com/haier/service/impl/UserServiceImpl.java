@@ -2,7 +2,6 @@ package com.haier.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.haier.enums.RegexEnum;
 import com.haier.enums.UserGroup;
 import com.haier.mapper.UserMapper;
 import com.haier.po.User;

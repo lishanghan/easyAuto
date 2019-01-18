@@ -1,6 +1,5 @@
 package com.haier.service.impl;
 
-import bsh.StringUtil;
 import com.haier.enums.GenEnum;
 import com.haier.enums.GenReplaceKWEnum;
 import com.haier.po.Tcase;
@@ -11,17 +10,12 @@ import com.haier.service.TcaseService;
 import com.haier.service.TiService;
 import com.haier.service.TserviceService;
 import com.haier.util.HryUtil;
-import com.itranswarp.compiler.JavaStringCompiler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 自动生成测试类并编译至内存中

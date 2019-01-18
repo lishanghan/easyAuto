@@ -1423,7 +1423,7 @@ vjs.Component.prototype.options_;
  * the two properties will be merged using vjs.obj.deepMerge.
  *
  * This is used for merging options for child components. We
- * want it to be easy to override individual options on a child
+ * want it to be haier to override individual options on a child
  * component without having to rewrite all the other default options.
  *
  *     Parent.prototype.options_ = {
@@ -1741,7 +1741,7 @@ vjs.Component.prototype.initChildren = function(){
 
       // Allow waiting to add components until a specific event is called
       var tempAdd = function(){
-        // Set property name on player. Could cause conflicts with other prop names, but it's worth making refs easy.
+        // Set property name on player. Could cause conflicts with other prop names, but it's worth making refs haier.
         self[name] = self.addChild(name, opts);
       };
 
