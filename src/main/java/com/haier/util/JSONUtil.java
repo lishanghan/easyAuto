@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * @Description: json封装类, 提供json与各种对象互转的方法及异常处理
- * @Author: luqiwei
+ * @Author: lish
  * @Date: 2018/5/3 11:28
  */
 @Slf4j
